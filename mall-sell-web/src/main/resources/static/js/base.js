@@ -1,0 +1,1 @@
+var app = angular.module('mall', []);//定义同城购模块
