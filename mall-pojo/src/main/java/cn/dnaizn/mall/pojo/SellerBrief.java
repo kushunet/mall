@@ -48,7 +48,7 @@ public class SellerBrief implements Serializable {
 
     private BigDecimal deliverFee;
 
-    private Integer deliverDiscount;
+    private BigDecimal deliverDiscount;
 
     private Object businessHours;
 

@@ -14,3 +14,4 @@
 # mall-address-service 8092
 # mall-sms-service 8093
 # mall-order-service 8094
+# mall-activity-service 8095

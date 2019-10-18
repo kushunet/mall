@@ -1,9 +1,10 @@
 package cn.dnaizn.mall.exception;
 
 import cn.dnaizn.mall.enums.ResultEnum;
+import lombok.Data;
 
 import java.io.Serializable;
-
+@Data
 public class MallException extends RuntimeException implements Serializable {
     private Integer code;
 

@@ -1465,52 +1465,52 @@ public class SellerBriefExample {
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountEqualTo(Integer value) {
+        public Criteria andDeliverDiscountEqualTo(BigDecimal value) {
             addCriterion("deliver_discount =", value, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountNotEqualTo(Integer value) {
+        public Criteria andDeliverDiscountNotEqualTo(BigDecimal value) {
             addCriterion("deliver_discount <>", value, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountGreaterThan(Integer value) {
+        public Criteria andDeliverDiscountGreaterThan(BigDecimal value) {
             addCriterion("deliver_discount >", value, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountGreaterThanOrEqualTo(Integer value) {
+        public Criteria andDeliverDiscountGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("deliver_discount >=", value, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountLessThan(Integer value) {
+        public Criteria andDeliverDiscountLessThan(BigDecimal value) {
             addCriterion("deliver_discount <", value, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountLessThanOrEqualTo(Integer value) {
+        public Criteria andDeliverDiscountLessThanOrEqualTo(BigDecimal value) {
             addCriterion("deliver_discount <=", value, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountIn(List<Integer> values) {
+        public Criteria andDeliverDiscountIn(List<BigDecimal> values) {
             addCriterion("deliver_discount in", values, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountNotIn(List<Integer> values) {
+        public Criteria andDeliverDiscountNotIn(List<BigDecimal> values) {
             addCriterion("deliver_discount not in", values, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountBetween(Integer value1, Integer value2) {
+        public Criteria andDeliverDiscountBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("deliver_discount between", value1, value2, "deliverDiscount");
             return (Criteria) this;
         }
 
-        public Criteria andDeliverDiscountNotBetween(Integer value1, Integer value2) {
+        public Criteria andDeliverDiscountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("deliver_discount not between", value1, value2, "deliverDiscount");
             return (Criteria) this;
         }

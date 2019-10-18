@@ -1,13 +1,14 @@
 package cn.dnaizn.mall.sell.controller;
 
+import cn.dnaizn.mall.DTO.DeliverDTO;
 import cn.dnaizn.mall.DTO.SellerFormDTO;
 import cn.dnaizn.mall.DTO.SellerRegisterDTO;
 import cn.dnaizn.mall.VO.SellerVO;
+import cn.dnaizn.mall.pojo.SellerExamine;
 import cn.dnaizn.mall.util.ResultVOUtil;
 import cn.dnaizn.mall.utils.PhoneFormatCheckUtils;
 import cn.dnaizn.mall.VO.ResultVO;
 import cn.dnaizn.mall.enums.EnumUtil;
-import cn.dnaizn.mall.enums.ResultEnum;
 import cn.dnaizn.mall.enums.SellerStatusEnum;
 import cn.dnaizn.mall.pojo.Seller;
 import cn.dnaizn.mall.pojo.SellerBrief;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
@@ -53,17 +55,18 @@ public class SellerController {
     /**
      * 修改
      *
-     * @param seller
+     * @param id
      * @return
      */
     @RequestMapping("/update")
-    public ResultVO update(@RequestBody Seller seller) {
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO update(@RequestParam(value = "id", defaultValue = "0") Integer id) {
         try {
-            sellerService.update(seller);
+            sellerService.update(SecurityContextHolder.getContext().getAuthentication().getName(), id);
             return ResultVOUtil.success("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultVOUtil.error(1, "修改失败");
+            return ResultVOUtil.error(1, e.getMessage());
         }
     }
 
@@ -74,11 +77,12 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/findOne")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO findOne() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         SellerVO sellerVO = new SellerVO();
-        BeanUtils.copyProperties(sellerService.findOne(sellerId),sellerVO);
-        SellerBrief sellerBrief =sellerBriefService.findOne(sellerId);
+        BeanUtils.copyProperties(sellerService.findOne(sellerId), sellerVO);
+        SellerBrief sellerBrief = sellerBriefService.findOne(sellerId);
         sellerVO.setCategory1Id(sellerBrief.getCategory1Id());
         sellerVO.setCategory2Id(sellerBrief.getCategory2Id());
         sellerVO.setCategory3Id(sellerBrief.getCategory3Id());
@@ -94,6 +98,7 @@ public class SellerController {
     }
 
     @RequestMapping("/findAll")
+//    @RolesAllowed({"SELLER", "VISITORS"})
     public List<Seller> findAll() {
         return sellerService.findAll();
     }
@@ -105,8 +110,9 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/findByParentId")
-    public List<SellerCat> findByParentId(Long parentId) {
-        return sellerCatService.findByParentId(parentId);
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO findByParentId(Long parentId) {
+        return ResultVOUtil.success(sellerCatService.findByParentId(parentId));
     }
 
     /**
@@ -116,6 +122,7 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/sellerFormDTO")
+    @RolesAllowed("VISITORS")
     public ResultVO sellerFormDTO(@RequestBody SellerFormDTO sellerFormDTO) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         sellerFormDTO.setSellerId(sellerId);
@@ -124,7 +131,7 @@ public class SellerController {
             return ResultVOUtil.success();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultVOUtil.error(ResultEnum.PARAM_ERROR.getCode(), e.getMessage());
+            return ResultVOUtil.error(1, e.getMessage());
         }
     }
 
@@ -151,6 +158,7 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/updateStatus")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO updateStatus() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
@@ -158,7 +166,7 @@ public class SellerController {
             return ResultVOUtil.success();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultVOUtil.error(ResultEnum.PARAM_ERROR.getCode(), e.getMessage());
+            return ResultVOUtil.error(1, e.getMessage());
         }
     }
 
@@ -168,6 +176,7 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/getStatus")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO getStatus() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         Integer status = sellerService.findOne(sellerId).getStatus();
@@ -231,11 +240,15 @@ public class SellerController {
             return ResultVOUtil.success("验证码发送成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultVOUtil.error(1, "验证码发送失败");
+            return ResultVOUtil.error(1, e.getMessage());
         }
     }
 
-
+    /**
+     * 商家注册
+     * @param sellerRegisterDTO
+     * @return
+     */
     @RequestMapping("/register")
     public ResultVO register(@RequestBody SellerRegisterDTO sellerRegisterDTO) {
         boolean checkSmsCode = sellerService.checkSmsCode(sellerRegisterDTO.getMobile(), sellerRegisterDTO.getCode());
@@ -252,9 +265,79 @@ public class SellerController {
             return ResultVOUtil.success("注册成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultVOUtil.error(1, "注册失败");
+            return ResultVOUtil.error(1, e.getMessage());
         }
     }
 
+    /**
+     * 增加修改信息
+     * @param sellerExamine
+     * @return
+     */
+    @RequestMapping("/addUpdate")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO addUpdate(@RequestBody SellerExamine sellerExamine) {
+        sellerExamine.setSellerId(SecurityContextHolder.getContext().getAuthentication().getName());
+        try {
+            sellerService.addUpdate(sellerExamine);
+            return ResultVOUtil.success("申请成功！！！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1, e.getMessage());
+        }
+    }
 
+    /**
+     * 查询修改信息
+     * @param type
+     * @return
+     */
+    @RequestMapping("/findOneUpdate")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO findOneUpdate(Integer type) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResultVOUtil.success(sellerService.findOneUpdate(sellerId, type));
+    }
+
+    /**
+     * 修改配送信息
+     * @param deliverDTO
+     * @return
+     */
+    @RequestMapping("/updateDeliver")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO updateDeliver(@RequestBody DeliverDTO deliverDTO) {
+        SellerBrief sellerBrief = new SellerBrief();
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        sellerBrief.setSellerId(sellerId);
+        sellerBrief.setMinprice(deliverDTO.getMinprice());
+        sellerBrief.setDeliverFee(deliverDTO.getDeliverFee());
+        sellerBrief.setDeliverDiscount(deliverDTO.getDeliverDiscount());
+        try {
+            sellerService.updateSellerBrief(sellerBrief);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1, e.getMessage());
+        }
+
+    }
+
+    /**
+     * 查询配送信息
+     * @return
+     */
+    @RequestMapping("/findOneDeliver")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO findOneDeliver() {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResultVOUtil.success(sellerService.findOneDeliver(sellerId));
+    }
+
+    @RequestMapping("/findAddress")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO findAddress() {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResultVOUtil.success(sellerService.findAddress(sellerId));
+    }
 }

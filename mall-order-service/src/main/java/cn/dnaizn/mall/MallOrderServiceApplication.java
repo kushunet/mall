@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MallOrderServiceApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(MallOrderServiceApplication.class, args);
+
     }
 
 }

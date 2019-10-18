@@ -1,9 +1,13 @@
 package cn.dnaizn.mall.service;
 
 
+import cn.dnaizn.mall.DTO.AddressDTO;
+import cn.dnaizn.mall.DTO.DeliverDTO;
 import cn.dnaizn.mall.DTO.SellerFormDTO;
 import cn.dnaizn.mall.DTO.SellerRegisterDTO;
 import cn.dnaizn.mall.pojo.Seller;
+import cn.dnaizn.mall.pojo.SellerBrief;
+import cn.dnaizn.mall.pojo.SellerExamine;
 import entity.PageResult;
 
 import java.util.List;
@@ -38,17 +42,34 @@ public interface SellerService {
 	/**
 	 * 修改
 	 */
-	void update(Seller seller);
-	
-
+	void update(String sellerId,Integer id);
+	/**
+	 * 修改
+	 */
+	void updateSellerBrief(SellerBrief sellerBrief);
+	/**
+	 * 查询修改
+	 */
+	List<SellerExamine> findOneUpdate(String sellerId,Integer type);
 	/**
 	 * 根据ID获取实体
 	 * @param id
 	 * @return
 	 */
 	Seller findOne(String id);
-	
-	
+
+	/**
+	 * 查询配送
+	 * @param sellerId
+	 * @return
+	 */
+	DeliverDTO findOneDeliver(String sellerId);
+
+	/**
+	 * 查询地址
+	 * @param sellerId
+	 */
+	AddressDTO findAddress(String sellerId);
 	/**
 	 * 批量删除
 	 * @param ids
@@ -74,4 +95,6 @@ public interface SellerService {
 	void createSmsCode(String mobile);
 
 	boolean  checkSmsCode(String mobile,String code);
+
+	void addUpdate(SellerExamine sellerExamine);
 }

@@ -23,7 +23,7 @@
     <result column="minPrice" property="minprice" jdbcType="DECIMAL" />
     <result column="auto_status" property="autoStatus" jdbcType="INTEGER" />
     <result column="deliver_fee" property="deliverFee" jdbcType="DECIMAL" />
-    <result column="deliver_discount" property="deliverDiscount" jdbcType="INTEGER" />
+    <result column="deliver_discount" property="deliverDiscount" jdbcType="DECIMAL" />
     <result column="business_hours" property="businessHours" jdbcType="OTHER" />
     <result column="is_reserve" property="isReserve" jdbcType="INTEGER" />
   </resultMap>
@@ -138,7 +138,7 @@
       #{avatar,jdbcType=VARCHAR}, #{adcode,jdbcType=BIGINT}, #{location,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{addressDetail,jdbcType=VARCHAR}, #{album,jdbcType=VARCHAR}, 
       #{minprice,jdbcType=DECIMAL}, #{autoStatus,jdbcType=INTEGER}, #{deliverFee,jdbcType=DECIMAL}, 
-      #{deliverDiscount,jdbcType=INTEGER}, #{businessHours,jdbcType=OTHER}, #{isReserve,jdbcType=INTEGER}
+      #{deliverDiscount,jdbcType=DECIMAL}, #{businessHours,jdbcType=OTHER}, #{isReserve,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.SellerBrief" >
@@ -282,7 +282,7 @@
         #{deliverFee,jdbcType=DECIMAL},
       </if>
       <if test="deliverDiscount != null" >
-        #{deliverDiscount,jdbcType=INTEGER},
+        #{deliverDiscount,jdbcType=DECIMAL},
       </if>
       <if test="businessHours != null" >
         #{businessHours,jdbcType=OTHER},
@@ -365,7 +365,7 @@
         deliver_fee = #{record.deliverFee,jdbcType=DECIMAL},
       </if>
       <if test="record.deliverDiscount != null" >
-        deliver_discount = #{record.deliverDiscount,jdbcType=INTEGER},
+        deliver_discount = #{record.deliverDiscount,jdbcType=DECIMAL},
       </if>
       <if test="record.businessHours != null" >
         business_hours = #{record.businessHours,jdbcType=OTHER},
@@ -401,7 +401,7 @@
       minPrice = #{record.minprice,jdbcType=DECIMAL},
       auto_status = #{record.autoStatus,jdbcType=INTEGER},
       deliver_fee = #{record.deliverFee,jdbcType=DECIMAL},
-      deliver_discount = #{record.deliverDiscount,jdbcType=INTEGER},
+      deliver_discount = #{record.deliverDiscount,jdbcType=DECIMAL},
       business_hours = #{record.businessHours,jdbcType=OTHER},
       is_reserve = #{record.isReserve,jdbcType=INTEGER}
     <if test="_parameter != null" >
@@ -472,7 +472,7 @@
         deliver_fee = #{deliverFee,jdbcType=DECIMAL},
       </if>
       <if test="deliverDiscount != null" >
-        deliver_discount = #{deliverDiscount,jdbcType=INTEGER},
+        deliver_discount = #{deliverDiscount,jdbcType=DECIMAL},
       </if>
       <if test="businessHours != null" >
         business_hours = #{businessHours,jdbcType=OTHER},
@@ -505,7 +505,7 @@
       minPrice = #{minprice,jdbcType=DECIMAL},
       auto_status = #{autoStatus,jdbcType=INTEGER},
       deliver_fee = #{deliverFee,jdbcType=DECIMAL},
-      deliver_discount = #{deliverDiscount,jdbcType=INTEGER},
+      deliver_discount = #{deliverDiscount,jdbcType=DECIMAL},
       business_hours = #{businessHours,jdbcType=OTHER},
       is_reserve = #{isReserve,jdbcType=INTEGER}
     where seller_id = #{sellerId,jdbcType=VARCHAR}
