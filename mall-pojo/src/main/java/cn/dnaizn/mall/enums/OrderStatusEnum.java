@@ -9,15 +9,20 @@ import java.io.Serializable;
  */
 @Getter
 public enum OrderStatusEnum implements CodeEnum, Serializable {
-    ORDER_CREATE(1, "订单创建"),
-    ORDER_PAYMENT_SUCCESS(2, "支付成功"),
-    ORDER_PAYMENT_REFUND_SUCCESS(3, "退款成功"),
-    ORDER_DELIVER_WAITING_FOR_DELIVERY(4, "等待骑手取货"),
-    ORDER_DELIVER_STATUS_ARRIVAL(5, "骑手到店"),
-    ORDER_DELIVER_STATUS_DISTRIBUTION(6, "配送中"),
-    ORDER_DELIVER_STATUS_COMPLETE(7, "已送达"),
-    STATUS_WAITING_FOR_ORDERS(8, "发起配送"),
+    PENDING_PAYMENT(1,"待付款"),
+    PENDING_SHIPPED(2,"待发货"),
+    PENDING_RECEIVED(3,"已发货"),
+    ORDER_COMPLETE(5,"待收货"),
+    ORDER_REFUND(6,"订单关闭"),
+    ORDER_CLOSE(7,"订单完成"),
+    ORDER_CANCEL(9,"申请退款"),
+    ORDER_REFUNDED(10,"已取消"),
+    SHIPPED(11,"已退款"),
+    REFUSAL_OF_REFUND(12,"商家拒绝退款"),
+    WAITING_FOR_ORDERS(13,"等待接单"),
+    REFUNDING(14,"退款中"),
     ;
+
     private Integer code;
     private String message;
 

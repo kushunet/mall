@@ -52,6 +52,12 @@ public interface DiscountService {
 	void delete(Integer[] ids);
 
 	/**
+	 * 批量软删除
+	 * @param ids
+	 */
+	void rDelete(Integer[] ids);
+
+	/**
 	 * 分页
 	 * @param pageNum 当前页 码
 	 * @param pageSize 每页记录数

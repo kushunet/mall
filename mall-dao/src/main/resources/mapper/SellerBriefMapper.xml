@@ -26,6 +26,8 @@
     <result column="deliver_discount" property="deliverDiscount" jdbcType="DECIMAL" />
     <result column="business_hours" property="businessHours" jdbcType="OTHER" />
     <result column="is_reserve" property="isReserve" jdbcType="INTEGER" />
+    <result column="notice" property="notice" jdbcType="VARCHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -89,7 +91,7 @@
     seller_id, nick_name, status, delivery_status, customer_unit_price, monthly_quantity, 
     score, category1_id, category2_id, category3_id, linkman_mobile, linkman_name, avatar, 
     adcode, location, address, address_detail, album, minPrice, auto_status, deliver_fee, 
-    deliver_discount, business_hours, is_reserve
+    deliver_discount, business_hours, is_reserve, notice, brief
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.SellerBriefExample" >
     select
@@ -129,8 +131,8 @@
       avatar, adcode, location, 
       address, address_detail, album, 
       minPrice, auto_status, deliver_fee, 
-      deliver_discount, business_hours, is_reserve
-      )
+      deliver_discount, business_hours, is_reserve, 
+      notice, brief)
     values (#{sellerId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{deliveryStatus,jdbcType=INTEGER}, #{customerUnitPrice,jdbcType=DECIMAL}, #{monthlyQuantity,jdbcType=INTEGER}, 
       #{score,jdbcType=DECIMAL}, #{category1Id,jdbcType=INTEGER}, #{category2Id,jdbcType=INTEGER}, 
@@ -138,8 +140,8 @@
       #{avatar,jdbcType=VARCHAR}, #{adcode,jdbcType=BIGINT}, #{location,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{addressDetail,jdbcType=VARCHAR}, #{album,jdbcType=VARCHAR}, 
       #{minprice,jdbcType=DECIMAL}, #{autoStatus,jdbcType=INTEGER}, #{deliverFee,jdbcType=DECIMAL}, 
-      #{deliverDiscount,jdbcType=DECIMAL}, #{businessHours,jdbcType=OTHER}, #{isReserve,jdbcType=INTEGER}
-      )
+      #{deliverDiscount,jdbcType=DECIMAL}, #{businessHours,jdbcType=OTHER}, #{isReserve,jdbcType=INTEGER}, 
+      #{notice,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.SellerBrief" >
     insert into seller_brief
@@ -216,6 +218,12 @@
       <if test="isReserve != null" >
         is_reserve,
       </if>
+      <if test="notice != null" >
+        notice,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sellerId != null" >
@@ -289,6 +297,12 @@
       </if>
       <if test="isReserve != null" >
         #{isReserve,jdbcType=INTEGER},
+      </if>
+      <if test="notice != null" >
+        #{notice,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -373,6 +387,12 @@
       <if test="record.isReserve != null" >
         is_reserve = #{record.isReserve,jdbcType=INTEGER},
       </if>
+      <if test="record.notice != null" >
+        notice = #{record.notice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brief != null" >
+        brief = #{record.brief,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -403,7 +423,9 @@
       deliver_fee = #{record.deliverFee,jdbcType=DECIMAL},
       deliver_discount = #{record.deliverDiscount,jdbcType=DECIMAL},
       business_hours = #{record.businessHours,jdbcType=OTHER},
-      is_reserve = #{record.isReserve,jdbcType=INTEGER}
+      is_reserve = #{record.isReserve,jdbcType=INTEGER},
+      notice = #{record.notice,jdbcType=VARCHAR},
+      brief = #{record.brief,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -480,6 +502,12 @@
       <if test="isReserve != null" >
         is_reserve = #{isReserve,jdbcType=INTEGER},
       </if>
+      <if test="notice != null" >
+        notice = #{notice,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
     </set>
     where seller_id = #{sellerId,jdbcType=VARCHAR}
   </update>
@@ -507,7 +535,9 @@
       deliver_fee = #{deliverFee,jdbcType=DECIMAL},
       deliver_discount = #{deliverDiscount,jdbcType=DECIMAL},
       business_hours = #{businessHours,jdbcType=OTHER},
-      is_reserve = #{isReserve,jdbcType=INTEGER}
+      is_reserve = #{isReserve,jdbcType=INTEGER},
+      notice = #{notice,jdbcType=VARCHAR},
+      brief = #{brief,jdbcType=VARCHAR}
     where seller_id = #{sellerId,jdbcType=VARCHAR}
   </update>
 </mapper>

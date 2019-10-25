@@ -42,7 +42,12 @@ public interface SellerService {
 	/**
 	 * 修改
 	 */
-	void update(String sellerId,Integer id);
+	void update(Seller seller);
+
+	/**
+	 * 修改
+	 */
+	void tUpdate(String sellerId,Integer id);
 	/**
 	 * 修改
 	 */
@@ -64,7 +69,6 @@ public interface SellerService {
 	 * @return
 	 */
 	DeliverDTO findOneDeliver(String sellerId);
-
 	/**
 	 * 查询地址
 	 * @param sellerId

@@ -67,7 +67,7 @@ public class SellerServiceImpl implements SellerService {
         map.put("status", 1);
         Map m = new HashMap();
         m.put("type", "order_status");
-        m.put("id", "admin");
+        m.put("id", "33549188335681536");
         m.put("status_cn", SellerStatusEnum.PASS_AUDIT.getMessage());
         map.put("data", m);
         jedis.publish("mall.message", JSONObject.toJSONString(map));
@@ -106,12 +106,16 @@ public class SellerServiceImpl implements SellerService {
         jedis.close();
     }
 
+    @Override
+    public void update(Seller seller) {
+        sellerMapper.updateByPrimaryKeySelective(seller);
+    }
 
     /**
      * 修改
      */
     @Override
-    public void update(String sellerId, Integer id){
+    public void tUpdate(String sellerId, Integer id){
             SellerExamine sellerExamine = sellerExamineMapper.selectByPrimaryKey(id);
             if (sellerExamine.getStatus().equals(2)){
                 if (!sellerExamine.getSellerId().equals(sellerId)){

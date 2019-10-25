@@ -12,6 +12,7 @@
     <result column="expire" property="expire" jdbcType="INTEGER" />
     <result column="use_mini_price" property="useMiniPrice" jdbcType="DECIMAL" />
     <result column="max_discount_price" property="maxDiscountPrice" jdbcType="DECIMAL" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, uuid, seller_id, title, type, num, discount, expire, use_mini_price, max_discount_price
+    id, uuid, seller_id, title, type, num, discount, expire, use_mini_price, max_discount_price, 
+    is_delete
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.DiscountExample" >
     select
@@ -107,12 +109,12 @@
   <insert id="insert" parameterType="cn.dnaizn.mall.pojo.Discount" >
     insert into discount (id, uuid, seller_id, 
       title, type, num, discount, 
-      expire, use_mini_price, max_discount_price
-      )
+      expire, use_mini_price, max_discount_price, 
+      is_delete)
     values (#{id,jdbcType=INTEGER}, #{uuid,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, 
       #{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{num,jdbcType=INTEGER}, #{discount,jdbcType=REAL}, 
-      #{expire,jdbcType=INTEGER}, #{useMiniPrice,jdbcType=DECIMAL}, #{maxDiscountPrice,jdbcType=DECIMAL}
-      )
+      #{expire,jdbcType=INTEGER}, #{useMiniPrice,jdbcType=DECIMAL}, #{maxDiscountPrice,jdbcType=DECIMAL}, 
+      #{isDelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.Discount" >
     insert into discount
@@ -147,6 +149,9 @@
       <if test="maxDiscountPrice != null" >
         max_discount_price,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -178,6 +183,9 @@
       </if>
       <if test="maxDiscountPrice != null" >
         #{maxDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -220,6 +228,9 @@
       <if test="record.maxDiscountPrice != null" >
         max_discount_price = #{record.maxDiscountPrice,jdbcType=DECIMAL},
       </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -236,7 +247,8 @@
       discount = #{record.discount,jdbcType=REAL},
       expire = #{record.expire,jdbcType=INTEGER},
       use_mini_price = #{record.useMiniPrice,jdbcType=DECIMAL},
-      max_discount_price = #{record.maxDiscountPrice,jdbcType=DECIMAL}
+      max_discount_price = #{record.maxDiscountPrice,jdbcType=DECIMAL},
+      is_delete = #{record.isDelete,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -271,6 +283,9 @@
       <if test="maxDiscountPrice != null" >
         max_discount_price = #{maxDiscountPrice,jdbcType=DECIMAL},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -284,7 +299,8 @@
       discount = #{discount,jdbcType=REAL},
       expire = #{expire,jdbcType=INTEGER},
       use_mini_price = #{useMiniPrice,jdbcType=DECIMAL},
-      max_discount_price = #{maxDiscountPrice,jdbcType=DECIMAL}
+      max_discount_price = #{maxDiscountPrice,jdbcType=DECIMAL},
+      is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -61,8 +61,9 @@ public class SellerController {
     @RequestMapping("/update")
     @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO update(@RequestParam(value = "id", defaultValue = "0") Integer id) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            sellerService.update(SecurityContextHolder.getContext().getAuthentication().getName(), id);
+            sellerService.tUpdate(sellerId, id);
             return ResultVOUtil.success("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,7 +118,6 @@ public class SellerController {
 
     /**
      * 表单
-     *
      * @param sellerFormDTO
      * @return
      */
@@ -246,6 +246,7 @@ public class SellerController {
 
     /**
      * 商家注册
+     *
      * @param sellerRegisterDTO
      * @return
      */
@@ -271,6 +272,7 @@ public class SellerController {
 
     /**
      * 增加修改信息
+     *
      * @param sellerExamine
      * @return
      */
@@ -289,6 +291,7 @@ public class SellerController {
 
     /**
      * 查询修改信息
+     *
      * @param type
      * @return
      */
@@ -301,6 +304,7 @@ public class SellerController {
 
     /**
      * 修改配送信息
+     *
      * @param deliverDTO
      * @return
      */
@@ -325,6 +329,7 @@ public class SellerController {
 
     /**
      * 查询配送信息
+     *
      * @return
      */
     @RequestMapping("/findOneDeliver")
@@ -334,6 +339,10 @@ public class SellerController {
         return ResultVOUtil.success(sellerService.findOneDeliver(sellerId));
     }
 
+    /**
+     * 查询地址
+     * @return
+     */
     @RequestMapping("/findAddress")
     @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO findAddress() {

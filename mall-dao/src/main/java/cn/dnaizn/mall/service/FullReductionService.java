@@ -30,7 +30,12 @@ public interface FullReductionService {
 	 * 增加
 	*/
 	void add(FullReduction fullReduction);
-	
+
+	/**
+	 * 更新删除
+	 * @param sellerId
+	 */
+	void updateDelete(String sellerId);
 	
 	/**
 	 * 修改

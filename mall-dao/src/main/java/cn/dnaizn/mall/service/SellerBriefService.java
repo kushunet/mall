@@ -53,12 +53,12 @@ public interface SellerBriefService {
 	 */
 	void delete(String[] ids);
 
-	/**
-	 * 分页
-	 * @param pageNum 当前页 码
-	 * @param pageSize 每页记录数
-	 * @return
-	 */
-	PageResult findPage(SellerBrief sellerBrief, int pageNum, int pageSize);
+//	/**
+//	 * 分页
+//	 * @param pageNum 当前页 码
+//	 * @param pageSize 每页记录数
+//	 * @return
+//	 */
+//	PageResult findPage(SellerBrief sellerBrief, int pageNum, int pageSize);
 	
 }

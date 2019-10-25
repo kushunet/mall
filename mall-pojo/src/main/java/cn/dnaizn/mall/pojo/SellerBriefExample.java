@@ -1634,6 +1634,146 @@ public class SellerBriefExample {
             addCriterion("is_reserve not between", value1, value2, "isReserve");
             return (Criteria) this;
         }
+
+        public Criteria andNoticeIsNull() {
+            addCriterion("notice is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeIsNotNull() {
+            addCriterion("notice is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeEqualTo(String value) {
+            addCriterion("notice =", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeNotEqualTo(String value) {
+            addCriterion("notice <>", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeGreaterThan(String value) {
+            addCriterion("notice >", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeGreaterThanOrEqualTo(String value) {
+            addCriterion("notice >=", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeLessThan(String value) {
+            addCriterion("notice <", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeLessThanOrEqualTo(String value) {
+            addCriterion("notice <=", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeLike(String value) {
+            addCriterion("notice like", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeNotLike(String value) {
+            addCriterion("notice not like", value, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeIn(List<String> values) {
+            addCriterion("notice in", values, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeNotIn(List<String> values) {
+            addCriterion("notice not in", values, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeBetween(String value1, String value2) {
+            addCriterion("notice between", value1, value2, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoticeNotBetween(String value1, String value2) {
+            addCriterion("notice not between", value1, value2, "notice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIsNull() {
+            addCriterion("brief is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIsNotNull() {
+            addCriterion("brief is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefEqualTo(String value) {
+            addCriterion("brief =", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefNotEqualTo(String value) {
+            addCriterion("brief <>", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefGreaterThan(String value) {
+            addCriterion("brief >", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefGreaterThanOrEqualTo(String value) {
+            addCriterion("brief >=", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefLessThan(String value) {
+            addCriterion("brief <", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefLessThanOrEqualTo(String value) {
+            addCriterion("brief <=", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefLike(String value) {
+            addCriterion("brief like", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefNotLike(String value) {
+            addCriterion("brief not like", value, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIn(List<String> values) {
+            addCriterion("brief in", values, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefNotIn(List<String> values) {
+            addCriterion("brief not in", values, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefBetween(String value1, String value2) {
+            addCriterion("brief between", value1, value2, "brief");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefNotBetween(String value1, String value2) {
+            addCriterion("brief not between", value1, value2, "brief");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

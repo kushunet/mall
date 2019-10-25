@@ -15,3 +15,4 @@
 # mall-sms-service 8093
 # mall-order-service 8094
 # mall-activity-service 8095
+# mall-websocket-service 8096

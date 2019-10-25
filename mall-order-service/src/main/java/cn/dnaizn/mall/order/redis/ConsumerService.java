@@ -1,4 +1,4 @@
-package cn.dnaizn.mall.order;
+package cn.dnaizn.mall.order.redis;
 
 import cn.dnaizn.mall.mq.ActiveMQUtil;
 import cn.dnaizn.mall.util.RedisUtil;

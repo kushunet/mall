@@ -3,8 +3,10 @@ package cn.dnaizn.mall.activity.service.impl;
 import java.util.List;
 
 import cn.dnaizn.mall.mapper.DiscountMapper;
+import cn.dnaizn.mall.mapper.UserCouponsMapper;
 import cn.dnaizn.mall.pojo.Discount;
 import cn.dnaizn.mall.pojo.DiscountExample;
+import cn.dnaizn.mall.pojo.UserCouponsExample;
 import cn.dnaizn.mall.utils.KeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -25,15 +27,17 @@ public class DiscountServiceImpl implements DiscountService {
     @Autowired
     DiscountMapper discountMapper;
 
+    @Autowired
+    UserCouponsMapper userCouponsMapper;
     /**
      * 查询全部
      */
     @Override
     public List<Discount> findAll(String sellerId) {
         DiscountExample example = new DiscountExample();
-		DiscountExample.Criteria criteria = example.createCriteria();
-		criteria.andSellerIdEqualTo(sellerId);
-		return discountMapper.selectByExample(example);
+        DiscountExample.Criteria criteria = example.createCriteria();
+        criteria.andSellerIdEqualTo(sellerId);
+        return discountMapper.selectByExample(example);
     }
 
     /**
@@ -61,7 +65,7 @@ public class DiscountServiceImpl implements DiscountService {
      */
     @Override
     public void update(Discount discount) {
-        discountMapper.updateByPrimaryKey(discount);
+        discountMapper.updateByPrimaryKeySelective(discount);
     }
 
     /**
@@ -81,10 +85,23 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     public void delete(Integer[] ids) {
         for (Integer id : ids) {
+            Discount discount = discountMapper.selectByPrimaryKey(id);
+            UserCouponsExample example = new UserCouponsExample();
+            UserCouponsExample.Criteria criteria = example.createCriteria();
+            criteria.andDiscountUuidEqualTo(discount.getUuid());
+            userCouponsMapper.deleteByExample(example);
             discountMapper.deleteByPrimaryKey(id);
         }
     }
 
+    @Override
+    public void rDelete(Integer[] ids) {
+        for (Integer id : ids) {
+            Discount discount = discountMapper.selectByPrimaryKey(id);
+            discount.setIsDelete((int) (System.currentTimeMillis() / 1000));
+            discountMapper.updateByPrimaryKeySelective(discount);
+        }
+    }
 
     @Override
     public PageResult findPage(Discount discount, int pageNum, int pageSize) {

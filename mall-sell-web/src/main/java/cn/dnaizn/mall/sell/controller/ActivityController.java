@@ -40,35 +40,39 @@ public class ActivityController {
 
     }
 
+    @RequestMapping("/deleteDiscount")
+    public ResultVO deleteDiscount(Integer[] ids) {
+            try {
+                discountServices.delete(ids);
+                return ResultVOUtil.success("红包永久删除成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResultVOUtil.error(1,"红包永久删除失败");
+            }
+    }
+    @RequestMapping("/rDeleteDiscount")
+    public ResultVO rDeleteDiscount(Integer[] ids) {
+        try {
+            discountServices.rDelete(ids);
+            return ResultVOUtil.success("红包删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1,"红包删除失败");
+        }
+    }
     @RequestMapping("/updateDiscount")
     public ResultVO updateDiscount(@RequestBody Discount discount) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (discount.getSellerId().equals(sellerId)){
-            try {
-                discountServices.update(discount);
-                return ResultVOUtil.success("红包修改成功");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ResultVOUtil.error(1,"红包修改失败");
-            }
-
-        }else {
-            return ResultVOUtil.error(1,"该优惠价不属于该商家");
-        }
-    }
-
-    @RequestMapping("/addFullReduction")
-    public ResultVO addFullReduction(@RequestBody FullReduction fullReduction) {
-        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-        fullReduction.setSellerId(sellerId);
+        discount.setSellerId(sellerId);
         try {
-            fullReductionService.add(fullReduction);
-            return ResultVOUtil.success();
+            discountServices.update(discount);
+            return ResultVOUtil.success("红包修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultVOUtil.error(1, "添加满减失败");
+            return ResultVOUtil.error(1,"红包修改失败");
         }
     }
+
 
     @RequestMapping("/findAllFullReduction")
     public ResultVO findAllFullReduction() {
@@ -78,7 +82,7 @@ public class ActivityController {
     @RequestMapping("/updateFullReduction")
     public ResultVO updateFullReduction(@RequestBody FullReduction fullReduction) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (fullReduction.getSellerId().equals(sellerId)){
+        fullReduction.setSellerId(sellerId);
             try {
                 fullReductionService.update(fullReduction);
                 return ResultVOUtil.success("满减修改成功");
@@ -86,9 +90,5 @@ public class ActivityController {
                 e.printStackTrace();
                 return ResultVOUtil.error(1,"满减修改失败");
             }
-
-        }else {
-            return ResultVOUtil.error(1,"该优惠价不属于该商家");
-        }
     }
 }
