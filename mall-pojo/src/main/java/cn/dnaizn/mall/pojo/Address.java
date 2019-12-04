@@ -6,27 +6,21 @@ import java.util.Date;
 public class Address implements Serializable {
     private Long id;
 
-    private String userId;
+    private Integer userId;
 
-    private String provinceId;
-
-    private String cityId;
-
-    private String townId;
+    private String isDefault;
 
     private String mobile;
+
+    private String adcode;
 
     private String address;
 
     private String contact;
 
-    private String isDefault;
-
-    private String notes;
+    private String point;
 
     private Date createDate;
-
-    private String alias;
 
     public Long getId() {
         return id;
@@ -36,36 +30,20 @@ public class Address implements Serializable {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public String getProvinceId() {
-        return provinceId;
+    public String getIsDefault() {
+        return isDefault;
     }
 
-    public void setProvinceId(String provinceId) {
-        this.provinceId = provinceId == null ? null : provinceId.trim();
-    }
-
-    public String getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(String cityId) {
-        this.cityId = cityId == null ? null : cityId.trim();
-    }
-
-    public String getTownId() {
-        return townId;
-    }
-
-    public void setTownId(String townId) {
-        this.townId = townId == null ? null : townId.trim();
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault == null ? null : isDefault.trim();
     }
 
     public String getMobile() {
@@ -74,6 +52,14 @@ public class Address implements Serializable {
 
     public void setMobile(String mobile) {
         this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getAdcode() {
+        return adcode;
+    }
+
+    public void setAdcode(String adcode) {
+        this.adcode = adcode == null ? null : adcode.trim();
     }
 
     public String getAddress() {
@@ -92,20 +78,12 @@ public class Address implements Serializable {
         this.contact = contact == null ? null : contact.trim();
     }
 
-    public String getIsDefault() {
-        return isDefault;
+    public String getPoint() {
+        return point;
     }
 
-    public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault == null ? null : isDefault.trim();
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes == null ? null : notes.trim();
+    public void setPoint(String point) {
+        this.point = point == null ? null : point.trim();
     }
 
     public Date getCreateDate() {
@@ -114,13 +92,5 @@ public class Address implements Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias == null ? null : alias.trim();
     }
 }

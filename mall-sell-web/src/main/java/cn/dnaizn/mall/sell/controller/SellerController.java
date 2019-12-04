@@ -4,27 +4,23 @@ import cn.dnaizn.mall.DTO.DeliverDTO;
 import cn.dnaizn.mall.DTO.SellerFormDTO;
 import cn.dnaizn.mall.DTO.SellerRegisterDTO;
 import cn.dnaizn.mall.VO.SellerVO;
-import cn.dnaizn.mall.pojo.SellerExamine;
+import cn.dnaizn.mall.pojo.*;
 import cn.dnaizn.mall.util.ResultVOUtil;
 import cn.dnaizn.mall.utils.PhoneFormatCheckUtils;
 import cn.dnaizn.mall.VO.ResultVO;
 import cn.dnaizn.mall.enums.EnumUtil;
 import cn.dnaizn.mall.enums.SellerStatusEnum;
-import cn.dnaizn.mall.pojo.Seller;
-import cn.dnaizn.mall.pojo.SellerBrief;
-import cn.dnaizn.mall.pojo.SellerCat;
 import cn.dnaizn.mall.service.SellerBriefService;
 import cn.dnaizn.mall.service.SellerCatService;
 import cn.dnaizn.mall.service.SellerService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.HashMap;
@@ -84,6 +80,7 @@ public class SellerController {
         SellerVO sellerVO = new SellerVO();
         BeanUtils.copyProperties(sellerService.findOne(sellerId), sellerVO);
         SellerBrief sellerBrief = sellerBriefService.findOne(sellerId);
+        sellerVO.setStatus(sellerBrief.getStatus());
         sellerVO.setCategory1Id(sellerBrief.getCategory1Id());
         sellerVO.setCategory2Id(sellerBrief.getCategory2Id());
         sellerVO.setCategory3Id(sellerBrief.getCategory3Id());
@@ -95,13 +92,9 @@ public class SellerController {
         sellerVO.setDeliverDiscount(sellerBrief.getDeliverDiscount());
         sellerVO.setBusinessHours(sellerBrief.getBusinessHours());
         sellerVO.setIsReserve(sellerBrief.getIsReserve());
+        sellerVO.setBrief(sellerBrief.getBrief());
+        sellerVO.setNotice(sellerBrief.getNotice());
         return ResultVOUtil.success(sellerVO);
-    }
-
-    @RequestMapping("/findAll")
-//    @RolesAllowed({"SELLER", "VISITORS"})
-    public List<Seller> findAll() {
-        return sellerService.findAll();
     }
 
     /**
@@ -118,6 +111,7 @@ public class SellerController {
 
     /**
      * 表单
+     *
      * @param sellerFormDTO
      * @return
      */
@@ -180,12 +174,9 @@ public class SellerController {
     public ResultVO getStatus() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         Integer status = sellerService.findOne(sellerId).getStatus();
-        if (status == 0) {
-            return ResultVOUtil.success();
-        } else {
-            SellerStatusEnum sellerStatusEnum = EnumUtil.getByCode(status, SellerStatusEnum.class);
-            return ResultVOUtil.error(sellerStatusEnum.getCode(), sellerStatusEnum.getMessage());
-        }
+        SellerStatusEnum sellerStatusEnum = EnumUtil.getByCode(status, SellerStatusEnum.class);
+        assert sellerStatusEnum != null;
+        return ResultVOUtil.error(sellerStatusEnum.getCode(), sellerStatusEnum.getMessage());
     }
 
     /**
@@ -195,6 +186,7 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/sellerCat")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO sellerCat(Long parentId) {
         List<SellerCat> sellerCat = sellerCatService.findByParentId(parentId);
         return ResultVOUtil.success(sellerCat);
@@ -210,12 +202,51 @@ public class SellerController {
     public Map selleInfo() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         SellerBrief sellerBrief = sellerBriefService.findOne(sellerId);
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("sellerId", sellerBrief.getSellerId());
         map.put("nickName", sellerBrief.getNickName());
         map.put("avatar", sellerBrief.getAvatar());
         map.put("status", sellerBrief.getStatus());
         return map;
+    }
+
+    /**
+     * 系统设置
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping("/set")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO set(@RequestBody Map<String, Object> map) {
+        SellerSetting sellerSetting = new SellerSetting();
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        sellerSetting.setSellerId(sellerId);
+        sellerSetting.setSetting(JSON.parseObject(JSONObject.toJSONString(map.get("data"))).toJSONString());
+        try {
+            sellerService.sellerSet(sellerSetting);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1, "更新失败！！");
+        }
+    }
+
+    /**
+     * 查找系统设置
+     *
+     * @return
+     */
+    @RequestMapping("/findSet")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO findSet() {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            return ResultVOUtil.success(sellerService.sellerFindSet(sellerId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1, "查找失败！！");
+        }
     }
 
     /**
@@ -225,18 +256,40 @@ public class SellerController {
      * @return
      */
     @RequestMapping("/sendCode")
-    public ResultVO sendCode(String mobile) {
+    public ResultVO sendCode(String mobile, @RequestParam(value = "type", defaultValue = "0") Integer type) {
         //判断手机号格式
         if (!PhoneFormatCheckUtils.isPhoneLegal(mobile)) {
             return ResultVOUtil.error(1, "手机号格式不正确");
         }
-        //判断手机号是否注册
-        Seller seller = sellerService.findMobile(mobile);
-        if (seller != null) {
-            return ResultVOUtil.error(1, "该手机号已被注册");
+        if (type == 0) {
+            //判断手机号是否注册
+            Seller seller = sellerService.findMobile(mobile);
+            if (seller != null) {
+                return ResultVOUtil.error(1, "该手机号已被注册");
+            }
         }
         try {
-            sellerService.createSmsCode(mobile);//生成验证码
+            //生成验证码
+            sellerService.createSmsCode(mobile, type);
+            return ResultVOUtil.success("验证码发送成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1, e.getMessage());
+        }
+    }
+
+    /**
+     * 发送短信验证码
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping("/sendSellerCode")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO sendSellerCode(@RequestParam(value = "type", defaultValue = "1") Integer type) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            sellerService.createSmsCode(sellerService.findOne(sellerId).getMobile(), type);//生成验证码
             return ResultVOUtil.success("验证码发送成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,13 +305,13 @@ public class SellerController {
      */
     @RequestMapping("/register")
     public ResultVO register(@RequestBody SellerRegisterDTO sellerRegisterDTO) {
-        boolean checkSmsCode = sellerService.checkSmsCode(sellerRegisterDTO.getMobile(), sellerRegisterDTO.getCode());
-        if (!checkSmsCode) {
-            return ResultVOUtil.error(1, "验证码错误！");
-        }
         Seller seller = sellerService.findOne(sellerRegisterDTO.getSellerId());
         if (seller != null) {
             return ResultVOUtil.error(1, "该用户名已被注册！");
+        }
+        boolean checkSmsCode = sellerService.checkSmsCode(sellerRegisterDTO.getMobile(), sellerRegisterDTO.getCode(), 0);
+        if (!checkSmsCode) {
+            return ResultVOUtil.error(1, "验证码错误！");
         }
         sellerRegisterDTO.setPassword(bCryptPasswordEncoder.encode(sellerRegisterDTO.getPassword()));
         try {
@@ -268,6 +321,34 @@ public class SellerController {
             e.printStackTrace();
             return ResultVOUtil.error(1, e.getMessage());
         }
+    }
+
+    /**
+     * 商家修改密码
+     *
+     * @param sellerRegisterDTO
+     * @return
+     */
+    @RequestMapping("/changePassword")
+    public ResultVO changePassword(@RequestBody SellerRegisterDTO sellerRegisterDTO) {
+        boolean checkSmsCode = sellerService.checkSmsCode(sellerRegisterDTO.getMobile(), sellerRegisterDTO.getCode(), 1);
+        if (!checkSmsCode) {
+            return ResultVOUtil.error(1, "验证码错误！！！");
+        }
+        Seller seller = sellerService.findMobile(sellerRegisterDTO.getMobile());
+        if (seller == null) {
+            return ResultVOUtil.error(1, "该用户不存在！！！");
+        } else {
+            seller.setPassword(bCryptPasswordEncoder.encode(sellerRegisterDTO.getPassword()));
+            try {
+                sellerService.update(seller);
+                return ResultVOUtil.success("密码修改成功！！！");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResultVOUtil.error(1, e.getMessage());
+            }
+        }
+
     }
 
     /**
@@ -301,7 +382,25 @@ public class SellerController {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResultVOUtil.success(sellerService.findOneUpdate(sellerId, type));
     }
+    /**
+     * 修改信息
+     *
+     * @param status
+     * @return
+     */
+    @RequestMapping("/updateSellerStatus")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO updateSellerStatus(Integer status) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            sellerService.updateSellerStatus(sellerId, status);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1,"修改失败！！");
+        }
 
+    }
     /**
      * 修改配送信息
      *
@@ -324,7 +423,6 @@ public class SellerController {
             e.printStackTrace();
             return ResultVOUtil.error(1, e.getMessage());
         }
-
     }
 
     /**
@@ -340,7 +438,49 @@ public class SellerController {
     }
 
     /**
+     * 查询自动接单订单
+     *
+     * @return
+     */
+    @RequestMapping("/findAuto")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO findAuto() {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        SellerBrief sellerBrief = sellerBriefService.findOne(sellerId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("autoStatus", sellerBrief.getAutoStatus());
+        map.put("isReserve", sellerBrief.getIsReserve());
+        map.put("prepare", sellerBrief.getPrepare());
+        return ResultVOUtil.success(map);
+    }
+
+    /**
+     * 修改自动接单订单
+     *
+     * @return
+     */
+    @RequestMapping("/updateAuto")
+    @RolesAllowed({"SELLER", "VISITORS"})
+    public ResultVO updateAuto(@RequestBody Map<String, Object> map) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        SellerBrief sellerBrief = new SellerBrief();
+        sellerBrief.setSellerId(sellerId);
+        sellerBrief.setPrepare(Integer.parseInt(map.get("prepare").toString()));
+        sellerBrief.setAutoStatus(Integer.parseInt(map.get("autoStatus").toString()));
+        sellerBrief.setIsReserve(Integer.parseInt(map.get("isReserve").toString()));
+        try {
+            sellerService.updateSellerBrief(sellerBrief);
+            return ResultVOUtil.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVOUtil.error(1, "修改失败");
+        }
+
+    }
+
+    /**
      * 查询地址
+     *
      * @return
      */
     @RequestMapping("/findAddress")

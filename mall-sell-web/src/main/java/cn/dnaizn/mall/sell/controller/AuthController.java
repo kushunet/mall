@@ -41,11 +41,12 @@ public class AuthController {
         }
     }
     @RequestMapping("/refreshToken")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO refreshToken(){
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         Seller seller = sellerService.findOne(sellerId);
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (seller.getStatus().equals("1")) {
+        if (seller.getStatus().equals(1)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_SELLER"));
         }else {
             authorities.add(new SimpleGrantedAuthority("ROLE_VISITORS"));
@@ -54,7 +55,7 @@ public class AuthController {
         for (GrantedAuthority authority : authorities){
             role = authority.getAuthority();
         }
-        Map map = new HashMap();
+        Map<String,String> map = new HashMap<>();
         map.put("token",JwtTokenUtils.createToken(seller.getSellerId(),role,true));
         return ResultVOUtil.success(map);
     }
@@ -69,7 +70,7 @@ public class AuthController {
     @RequestMapping("/info")
     @RolesAllowed({"SELLER","VISITORS"})
     public ResultVO info(){
-        Map map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("username",SecurityContextHolder.getContext().getAuthentication().getName());
         map.put("authorities",SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return ResultVOUtil.success(map);

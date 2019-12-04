@@ -446,6 +446,66 @@ public class SellerExample {
             return (Criteria) this;
         }
 
+        public Criteria andTBalanceIsNull() {
+            addCriterion("t_balance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceIsNotNull() {
+            addCriterion("t_balance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceEqualTo(BigDecimal value) {
+            addCriterion("t_balance =", value, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceNotEqualTo(BigDecimal value) {
+            addCriterion("t_balance <>", value, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceGreaterThan(BigDecimal value) {
+            addCriterion("t_balance >", value, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("t_balance >=", value, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceLessThan(BigDecimal value) {
+            addCriterion("t_balance <", value, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("t_balance <=", value, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceIn(List<BigDecimal> values) {
+            addCriterion("t_balance in", values, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceNotIn(List<BigDecimal> values) {
+            addCriterion("t_balance not in", values, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("t_balance between", value1, value2, "tBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andTBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("t_balance not between", value1, value2, "tBalance");
+            return (Criteria) this;
+        }
+
         public Criteria andEmailIsNull() {
             addCriterion("email is null");
             return (Criteria) this;

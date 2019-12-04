@@ -16,5 +16,7 @@ public class OrderDTO implements Serializable {
 
     private List<Integer> state;
 
+    private List<Integer> afterSale;
+
     private Integer order;
 }

@@ -23,9 +23,15 @@ public class OrderMain implements Serializable {
 
     private BigDecimal postFee;
 
+    private BigDecimal postFeeSeller;
+
     private Byte isEvaluate;
 
     private Integer status;
+
+    private Integer afterSale;
+
+    private Integer fixedTime;
 
     private Date createTime;
 
@@ -139,6 +145,14 @@ public class OrderMain implements Serializable {
         this.postFee = postFee;
     }
 
+    public BigDecimal getPostFeeSeller() {
+        return postFeeSeller;
+    }
+
+    public void setPostFeeSeller(BigDecimal postFeeSeller) {
+        this.postFeeSeller = postFeeSeller;
+    }
+
     public Byte getIsEvaluate() {
         return isEvaluate;
     }
@@ -153,6 +167,22 @@ public class OrderMain implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getAfterSale() {
+        return afterSale;
+    }
+
+    public void setAfterSale(Integer afterSale) {
+        this.afterSale = afterSale;
+    }
+
+    public Integer getFixedTime() {
+        return fixedTime;
+    }
+
+    public void setFixedTime(Integer fixedTime) {
+        this.fixedTime = fixedTime;
     }
 
     public Date getCreateTime() {

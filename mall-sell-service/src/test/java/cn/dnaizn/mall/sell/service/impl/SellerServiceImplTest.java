@@ -1,6 +1,8 @@
 package cn.dnaizn.mall.sell.service.impl;
 
+import cn.dnaizn.mall.mapper.PrinterMapper;
 import cn.dnaizn.mall.mapper.SellerMapper;
+import cn.dnaizn.mall.pojo.Printer;
 import cn.dnaizn.mall.pojo.Seller;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,10 +18,13 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 public class SellerServiceImplTest {
     @Autowired
-    SellerMapper sellerMapper;
+    PrinterMapper printerMapper;
     @Test
     public void findAll() {
-        List<Seller> sellerList = sellerMapper.selectByExample(null);
-        Assert.assertNotNull(sellerList);
+        Printer printer = new Printer();
+        printer.setSellerId("admin");
+        printer.setPrinterId("111111111111");
+        printerMapper.insert(printer);
+        return;
     }
 }

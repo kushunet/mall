@@ -1,7 +1,7 @@
 package cn.dnaizn.mall.manager.config;
 
 
-import cn.dnaizn.mall.manager.service.Imlp.UserDetailsServiceImpl;
+import cn.dnaizn.mall.manager.service.impl.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

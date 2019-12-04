@@ -1774,6 +1774,66 @@ public class SellerBriefExample {
             addCriterion("brief not between", value1, value2, "brief");
             return (Criteria) this;
         }
+
+        public Criteria andPrepareIsNull() {
+            addCriterion("prepare is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareIsNotNull() {
+            addCriterion("prepare is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareEqualTo(Integer value) {
+            addCriterion("prepare =", value, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareNotEqualTo(Integer value) {
+            addCriterion("prepare <>", value, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareGreaterThan(Integer value) {
+            addCriterion("prepare >", value, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareGreaterThanOrEqualTo(Integer value) {
+            addCriterion("prepare >=", value, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareLessThan(Integer value) {
+            addCriterion("prepare <", value, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareLessThanOrEqualTo(Integer value) {
+            addCriterion("prepare <=", value, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareIn(List<Integer> values) {
+            addCriterion("prepare in", values, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareNotIn(List<Integer> values) {
+            addCriterion("prepare not in", values, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareBetween(Integer value1, Integer value2) {
+            addCriterion("prepare between", value1, value2, "prepare");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepareNotBetween(Integer value1, Integer value2) {
+            addCriterion("prepare not between", value1, value2, "prepare");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

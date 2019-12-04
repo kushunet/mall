@@ -15,7 +15,7 @@ public class User implements Serializable {
 
     private String phone;
 
-    private BigDecimal accountBalance;
+    private BigDecimal balance;
 
     private String email;
 
@@ -93,12 +93,12 @@ public class User implements Serializable {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public BigDecimal getAccountBalance() {
-        return accountBalance;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setAccountBalance(BigDecimal accountBalance) {
-        this.accountBalance = accountBalance;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public String getEmail() {

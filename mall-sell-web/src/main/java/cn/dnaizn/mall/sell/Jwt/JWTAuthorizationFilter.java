@@ -1,5 +1,6 @@
 package cn.dnaizn.mall.sell.Jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,8 +30,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return;
         }
+
         // 如果请求头中有token，则进行解析，并且设置认证信息
-        SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
+        try {
+            SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
+        } catch (ExpiredJwtException e) {
+            chain.doFilter(request, response);
+            return;
+        }
         super.doFilterInternal(request, response, chain);
 
     }

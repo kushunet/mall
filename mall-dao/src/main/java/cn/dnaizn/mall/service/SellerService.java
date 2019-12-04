@@ -5,9 +5,7 @@ import cn.dnaizn.mall.DTO.AddressDTO;
 import cn.dnaizn.mall.DTO.DeliverDTO;
 import cn.dnaizn.mall.DTO.SellerFormDTO;
 import cn.dnaizn.mall.DTO.SellerRegisterDTO;
-import cn.dnaizn.mall.pojo.Seller;
-import cn.dnaizn.mall.pojo.SellerBrief;
-import cn.dnaizn.mall.pojo.SellerExamine;
+import cn.dnaizn.mall.pojo.*;
 import entity.PageResult;
 
 import java.util.List;
@@ -90,15 +88,43 @@ public interface SellerService {
 
 	void updateStatus(String sellerId, Integer status);
 
+	void updateSellerStatus(String sellerId, Integer status);
+
 	Seller findMobile(String mobile);
 
 	void SellerRegister(SellerFormDTO sellerFormDTO);
 
 	SellerFormDTO getSellerRegisterById(String sellerId);
 
-	void createSmsCode(String mobile);
+	void createSmsCode(String mobile ,Integer type);
 
-	boolean  checkSmsCode(String mobile,String code);
+	boolean  checkSmsCode(String mobile,String code,Integer type);
 
 	void addUpdate(SellerExamine sellerExamine);
+
+	/**
+	 * 增加打印机
+	 * @param printer
+	 */
+	void addPrinter(Printer printer);
+	/**
+	 * 修改打印机
+	 * @param printer
+	 */
+	void updatePrinter(Printer printer);
+
+	Printer findPrinter(String posId);
+	/**
+	 *
+	 * @param sellerId
+	 */
+	List<Printer> findPrinterList(String sellerId);
+
+	void deletePos(Integer id);
+
+	void sellerSet(SellerSetting sellerSetting);
+
+	Object sellerFindSet(String sellerId);
+
+	SellerWechatAccount isOpenid (String sellerId);
 }

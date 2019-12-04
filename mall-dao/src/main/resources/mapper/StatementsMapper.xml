@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dnaizn.mall.mapper.StatementsMapper" >
+  <resultMap id="BaseResultMap" type="cn.dnaizn.mall.pojo.Statements" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="seller_id" property="sellerId" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="wait_number" property="waitNumber" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="wait_amount" property="waitAmount" jdbcType="DECIMAL" />
+    <result column="c_time" property="cTime" jdbcType="INTEGER" />
+    <result column="date_string" property="dateString" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, seller_id, number, wait_number, amount, wait_amount, c_time, date_string
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.StatementsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from statements
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from statements
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from statements
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.dnaizn.mall.pojo.StatementsExample" >
+    delete from statements
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.dnaizn.mall.pojo.Statements" >
+    insert into statements (id, seller_id, number, 
+      wait_number, amount, wait_amount, 
+      c_time, date_string)
+    values (#{id,jdbcType=INTEGER}, #{sellerId,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{waitNumber,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{waitAmount,jdbcType=DECIMAL}, 
+      #{cTime,jdbcType=INTEGER}, #{dateString,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.Statements" >
+    insert into statements
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="waitNumber != null" >
+        wait_number,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="waitAmount != null" >
+        wait_amount,
+      </if>
+      <if test="cTime != null" >
+        c_time,
+      </if>
+      <if test="dateString != null" >
+        date_string,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="waitNumber != null" >
+        #{waitNumber,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="waitAmount != null" >
+        #{waitAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cTime != null" >
+        #{cTime,jdbcType=INTEGER},
+      </if>
+      <if test="dateString != null" >
+        #{dateString,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.dnaizn.mall.pojo.StatementsExample" resultType="java.lang.Integer" >
+    select count(*) from statements
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update statements
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.sellerId != null" >
+        seller_id = #{record.sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.waitNumber != null" >
+        wait_number = #{record.waitNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.waitAmount != null" >
+        wait_amount = #{record.waitAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cTime != null" >
+        c_time = #{record.cTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.dateString != null" >
+        date_string = #{record.dateString,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update statements
+    set id = #{record.id,jdbcType=INTEGER},
+      seller_id = #{record.sellerId,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=INTEGER},
+      wait_number = #{record.waitNumber,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      wait_amount = #{record.waitAmount,jdbcType=DECIMAL},
+      c_time = #{record.cTime,jdbcType=INTEGER},
+      date_string = #{record.dateString,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dnaizn.mall.pojo.Statements" >
+    update statements
+    <set >
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="waitNumber != null" >
+        wait_number = #{waitNumber,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="waitAmount != null" >
+        wait_amount = #{waitAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cTime != null" >
+        c_time = #{cTime,jdbcType=INTEGER},
+      </if>
+      <if test="dateString != null" >
+        date_string = #{dateString,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dnaizn.mall.pojo.Statements" >
+    update statements
+    set seller_id = #{sellerId,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      wait_number = #{waitNumber,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      wait_amount = #{waitAmount,jdbcType=DECIMAL},
+      c_time = #{cTime,jdbcType=INTEGER},
+      date_string = #{dateString,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -495,63 +495,183 @@ public class TransfersListExample {
             return (Criteria) this;
         }
 
-        public Criteria andTimeIsNull() {
-            addCriterion("time is null");
+        public Criteria andCTimeIsNull() {
+            addCriterion("c_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andTimeIsNotNull() {
-            addCriterion("time is not null");
+        public Criteria andCTimeIsNotNull() {
+            addCriterion("c_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTimeEqualTo(Integer value) {
-            addCriterion("time =", value, "time");
+        public Criteria andCTimeEqualTo(Integer value) {
+            addCriterion("c_time =", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotEqualTo(Integer value) {
-            addCriterion("time <>", value, "time");
+        public Criteria andCTimeNotEqualTo(Integer value) {
+            addCriterion("c_time <>", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeGreaterThan(Integer value) {
-            addCriterion("time >", value, "time");
+        public Criteria andCTimeGreaterThan(Integer value) {
+            addCriterion("c_time >", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("time >=", value, "time");
+        public Criteria andCTimeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("c_time >=", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeLessThan(Integer value) {
-            addCriterion("time <", value, "time");
+        public Criteria andCTimeLessThan(Integer value) {
+            addCriterion("c_time <", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeLessThanOrEqualTo(Integer value) {
-            addCriterion("time <=", value, "time");
+        public Criteria andCTimeLessThanOrEqualTo(Integer value) {
+            addCriterion("c_time <=", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeIn(List<Integer> values) {
-            addCriterion("time in", values, "time");
+        public Criteria andCTimeIn(List<Integer> values) {
+            addCriterion("c_time in", values, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotIn(List<Integer> values) {
-            addCriterion("time not in", values, "time");
+        public Criteria andCTimeNotIn(List<Integer> values) {
+            addCriterion("c_time not in", values, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeBetween(Integer value1, Integer value2) {
-            addCriterion("time between", value1, value2, "time");
+        public Criteria andCTimeBetween(Integer value1, Integer value2) {
+            addCriterion("c_time between", value1, value2, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andTimeNotBetween(Integer value1, Integer value2) {
-            addCriterion("time not between", value1, value2, "time");
+        public Criteria andCTimeNotBetween(Integer value1, Integer value2) {
+            addCriterion("c_time not between", value1, value2, "cTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(Integer value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(Integer value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(Integer value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(Integer value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<Integer> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<Integer> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(Integer value1, Integer value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeIsNull() {
+            addCriterion("r_fee is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeIsNotNull() {
+            addCriterion("r_fee is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeEqualTo(BigDecimal value) {
+            addCriterion("r_fee =", value, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeNotEqualTo(BigDecimal value) {
+            addCriterion("r_fee <>", value, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeGreaterThan(BigDecimal value) {
+            addCriterion("r_fee >", value, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("r_fee >=", value, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeLessThan(BigDecimal value) {
+            addCriterion("r_fee <", value, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("r_fee <=", value, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeIn(List<BigDecimal> values) {
+            addCriterion("r_fee in", values, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeNotIn(List<BigDecimal> values) {
+            addCriterion("r_fee not in", values, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("r_fee between", value1, value2, "rFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andRFeeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("r_fee not between", value1, value2, "rFee");
             return (Criteria) this;
         }
     }

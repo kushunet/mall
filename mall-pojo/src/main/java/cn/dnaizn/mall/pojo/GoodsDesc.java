@@ -18,7 +18,7 @@ public class GoodsDesc implements Serializable {
 
     private BigDecimal packagefee;
 
-    private Long cTime;
+    private Integer cTime;
 
     private Integer maxStock;
 
@@ -84,11 +84,11 @@ public class GoodsDesc implements Serializable {
         this.packagefee = packagefee;
     }
 
-    public Long getcTime() {
+    public Integer getcTime() {
         return cTime;
     }
 
-    public void setcTime(Long cTime) {
+    public void setcTime(Integer cTime) {
         this.cTime = cTime;
     }
 

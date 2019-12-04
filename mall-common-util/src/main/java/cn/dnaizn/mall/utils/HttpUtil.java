@@ -10,19 +10,21 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 public class HttpUtil {
-
+    public  static final String ORDER_URL = "http://order.dnaizn.cn/";
+    public  static final String PRIN_URL = "http://prin.dnaizn.cn/";
     public static JSONObject jsonPost(String url, JSONObject jsonObject) {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost("http://192.168.31.27:8804/"+url);
+        HttpPost post = new HttpPost(url);
         JSONObject response = null;
         try {
-            StringEntity s = new StringEntity(jsonObject.toString());
-            s.setContentEncoding("utf-8");
+            StringEntity s = new StringEntity(jsonObject.toString(),"UTF-8");
+            s.setContentEncoding("UTF-8");
             s.setContentType("application/json");//发送json数据需要设置contentType
             post.setEntity(s);
             HttpResponse res = httpclient.execute(post);
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 String result = EntityUtils.toString(res.getEntity());// 返回json格式：
+                System.out.println(result);
                 response = JSONObject.parseObject(result);
             }
         } catch (Exception e) {

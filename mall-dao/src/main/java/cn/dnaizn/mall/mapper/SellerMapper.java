@@ -2,7 +2,9 @@ package cn.dnaizn.mall.mapper;
 
 import cn.dnaizn.mall.pojo.Seller;
 import cn.dnaizn.mall.pojo.SellerExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface SellerMapper {

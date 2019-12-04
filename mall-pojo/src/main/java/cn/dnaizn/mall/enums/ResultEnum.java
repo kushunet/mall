@@ -4,8 +4,14 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
+/**
+ * @author lin
+ */
 @Getter
 public enum ResultEnum implements Serializable {
+    /**
+     * 返回状态
+     */
     SUCCESS(0, "成功"),
     PARAM_ERROR(1, "参数不正确"),
     PRODUCT_NOT_EXIST(10, "商品不存在"),

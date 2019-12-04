@@ -666,6 +666,66 @@ public class OrderMainExample {
             return (Criteria) this;
         }
 
+        public Criteria andPostFeeSellerIsNull() {
+            addCriterion("post_fee_seller is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerIsNotNull() {
+            addCriterion("post_fee_seller is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerEqualTo(BigDecimal value) {
+            addCriterion("post_fee_seller =", value, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerNotEqualTo(BigDecimal value) {
+            addCriterion("post_fee_seller <>", value, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerGreaterThan(BigDecimal value) {
+            addCriterion("post_fee_seller >", value, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("post_fee_seller >=", value, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerLessThan(BigDecimal value) {
+            addCriterion("post_fee_seller <", value, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("post_fee_seller <=", value, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerIn(List<BigDecimal> values) {
+            addCriterion("post_fee_seller in", values, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerNotIn(List<BigDecimal> values) {
+            addCriterion("post_fee_seller not in", values, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("post_fee_seller between", value1, value2, "postFeeSeller");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostFeeSellerNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("post_fee_seller not between", value1, value2, "postFeeSeller");
+            return (Criteria) this;
+        }
+
         public Criteria andIsEvaluateIsNull() {
             addCriterion("is_evaluate is null");
             return (Criteria) this;
@@ -783,6 +843,126 @@ public class OrderMainExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleIsNull() {
+            addCriterion("after_sale is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleIsNotNull() {
+            addCriterion("after_sale is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleEqualTo(Integer value) {
+            addCriterion("after_sale =", value, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleNotEqualTo(Integer value) {
+            addCriterion("after_sale <>", value, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleGreaterThan(Integer value) {
+            addCriterion("after_sale >", value, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleGreaterThanOrEqualTo(Integer value) {
+            addCriterion("after_sale >=", value, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleLessThan(Integer value) {
+            addCriterion("after_sale <", value, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleLessThanOrEqualTo(Integer value) {
+            addCriterion("after_sale <=", value, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleIn(List<Integer> values) {
+            addCriterion("after_sale in", values, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleNotIn(List<Integer> values) {
+            addCriterion("after_sale not in", values, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleBetween(Integer value1, Integer value2) {
+            addCriterion("after_sale between", value1, value2, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andAfterSaleNotBetween(Integer value1, Integer value2) {
+            addCriterion("after_sale not between", value1, value2, "afterSale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeIsNull() {
+            addCriterion("fixed_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeIsNotNull() {
+            addCriterion("fixed_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeEqualTo(Integer value) {
+            addCriterion("fixed_time =", value, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeNotEqualTo(Integer value) {
+            addCriterion("fixed_time <>", value, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeGreaterThan(Integer value) {
+            addCriterion("fixed_time >", value, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("fixed_time >=", value, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeLessThan(Integer value) {
+            addCriterion("fixed_time <", value, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeLessThanOrEqualTo(Integer value) {
+            addCriterion("fixed_time <=", value, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeIn(List<Integer> values) {
+            addCriterion("fixed_time in", values, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeNotIn(List<Integer> values) {
+            addCriterion("fixed_time not in", values, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeBetween(Integer value1, Integer value2) {
+            addCriterion("fixed_time between", value1, value2, "fixedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFixedTimeNotBetween(Integer value1, Integer value2) {
+            addCriterion("fixed_time not between", value1, value2, "fixedTime");
             return (Criteria) this;
         }
 

@@ -2,9 +2,8 @@ package cn.dnaizn.mall.mapper;
 
 import cn.dnaizn.mall.pojo.Content;
 import cn.dnaizn.mall.pojo.ContentExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface ContentMapper {
     int countByExample(ContentExample example);

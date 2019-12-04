@@ -10,6 +10,8 @@ public class Admin implements Serializable {
 
     private Date loginTime;
 
+    private Integer type;
+
     public String getAdminId() {
         return adminId;
     }
@@ -32,5 +34,13 @@ public class Admin implements Serializable {
 
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

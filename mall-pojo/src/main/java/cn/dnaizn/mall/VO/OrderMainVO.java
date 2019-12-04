@@ -1,10 +1,13 @@
 package cn.dnaizn.mall.VO;
 
+import cn.dnaizn.mall.pojo.OrderStatusList;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Data
 public class OrderMainVO implements Serializable {
@@ -24,6 +27,8 @@ public class OrderMainVO implements Serializable {
     private Byte isEvaluate;
 
     private Integer status;
+
+    private Integer afterSale;
 
     private Date createTime;
 
@@ -64,4 +69,5 @@ public class OrderMainVO implements Serializable {
     private Integer sourceType;
 
     private Integer reserveTime;
+
 }

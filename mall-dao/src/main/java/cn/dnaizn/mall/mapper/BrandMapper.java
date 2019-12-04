@@ -2,10 +2,10 @@ package cn.dnaizn.mall.mapper;
 
 import cn.dnaizn.mall.pojo.Brand;
 import cn.dnaizn.mall.pojo.BrandExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 public interface BrandMapper {
     int countByExample(BrandExample example);

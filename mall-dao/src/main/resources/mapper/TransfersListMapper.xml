@@ -8,7 +8,9 @@
     <result column="wx_transfers_id" property="wxTransfersId" jdbcType="VARCHAR" />
     <result column="fee" property="fee" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="time" property="time" jdbcType="INTEGER" />
+    <result column="c_time" property="cTime" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="r_fee" property="rFee" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, seller_id, transfers_id, wx_transfers_id, fee, status, time
+    id, seller_id, transfers_id, wx_transfers_id, fee, status, c_time, type, r_fee
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.TransfersListExample" >
     select
@@ -104,10 +106,10 @@
   <insert id="insert" parameterType="cn.dnaizn.mall.pojo.TransfersList" >
     insert into transfers_list (id, seller_id, transfers_id, 
       wx_transfers_id, fee, status, 
-      time)
+      c_time, type, r_fee)
     values (#{id,jdbcType=INTEGER}, #{sellerId,jdbcType=VARCHAR}, #{transfersId,jdbcType=VARCHAR}, 
       #{wxTransfersId,jdbcType=VARCHAR}, #{fee,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
-      #{time,jdbcType=INTEGER})
+      #{cTime,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{rFee,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.TransfersList" >
     insert into transfers_list
@@ -130,8 +132,14 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="time != null" >
-        time,
+      <if test="cTime != null" >
+        c_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="rFee != null" >
+        r_fee,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -153,8 +161,14 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="time != null" >
-        #{time,jdbcType=INTEGER},
+      <if test="cTime != null" >
+        #{cTime,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="rFee != null" >
+        #{rFee,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -185,8 +199,14 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.time != null" >
-        time = #{record.time,jdbcType=INTEGER},
+      <if test="record.cTime != null" >
+        c_time = #{record.cTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.rFee != null" >
+        r_fee = #{record.rFee,jdbcType=DECIMAL},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -201,7 +221,9 @@
       wx_transfers_id = #{record.wxTransfersId,jdbcType=VARCHAR},
       fee = #{record.fee,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=INTEGER},
-      time = #{record.time,jdbcType=INTEGER}
+      c_time = #{record.cTime,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      r_fee = #{record.rFee,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,8 +246,14 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="time != null" >
-        time = #{time,jdbcType=INTEGER},
+      <if test="cTime != null" >
+        c_time = #{cTime,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="rFee != null" >
+        r_fee = #{rFee,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -237,7 +265,9 @@
       wx_transfers_id = #{wxTransfersId,jdbcType=VARCHAR},
       fee = #{fee,jdbcType=DECIMAL},
       status = #{status,jdbcType=INTEGER},
-      time = #{time,jdbcType=INTEGER}
+      c_time = #{cTime,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      r_fee = #{rFee,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

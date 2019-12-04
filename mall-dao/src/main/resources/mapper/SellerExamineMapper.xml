@@ -10,6 +10,7 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="examine_time" property="examineTime" jdbcType="TIMESTAMP" />
     <result column="admin_id" property="adminId" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, seller_id, type, data, create_time, status, examine_time, admin_id
+    id, seller_id, type, data, create_time, status, examine_time, admin_id, reason
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.SellerExamineExample" >
     select
@@ -105,10 +106,12 @@
   <insert id="insert" parameterType="cn.dnaizn.mall.pojo.SellerExamine" >
     insert into seller_examine (id, seller_id, type, 
       data, create_time, status, 
-      examine_time, admin_id)
+      examine_time, admin_id, reason
+      )
     values (#{id,jdbcType=INTEGER}, #{sellerId,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
       #{data,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{examineTime,jdbcType=TIMESTAMP}, #{adminId,jdbcType=VARCHAR})
+      #{examineTime,jdbcType=TIMESTAMP}, #{adminId,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.SellerExamine" >
     insert into seller_examine
@@ -137,6 +140,9 @@
       <if test="adminId != null" >
         admin_id,
       </if>
+      <if test="reason != null" >
+        reason,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -162,6 +168,9 @@
       </if>
       <if test="adminId != null" >
         #{adminId,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -198,6 +207,9 @@
       <if test="record.adminId != null" >
         admin_id = #{record.adminId,jdbcType=VARCHAR},
       </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -212,7 +224,8 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=INTEGER},
       examine_time = #{record.examineTime,jdbcType=TIMESTAMP},
-      admin_id = #{record.adminId,jdbcType=VARCHAR}
+      admin_id = #{record.adminId,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -241,6 +254,9 @@
       <if test="adminId != null" >
         admin_id = #{adminId,jdbcType=VARCHAR},
       </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -252,7 +268,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
       examine_time = #{examineTime,jdbcType=TIMESTAMP},
-      admin_id = #{adminId,jdbcType=VARCHAR}
+      admin_id = #{adminId,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -555,52 +555,52 @@ public class GoodsDescExample {
             return (Criteria) this;
         }
 
-        public Criteria andCTimeEqualTo(Long value) {
+        public Criteria andCTimeEqualTo(Integer value) {
             addCriterion("c_time =", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeNotEqualTo(Long value) {
+        public Criteria andCTimeNotEqualTo(Integer value) {
             addCriterion("c_time <>", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeGreaterThan(Long value) {
+        public Criteria andCTimeGreaterThan(Integer value) {
             addCriterion("c_time >", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeGreaterThanOrEqualTo(Long value) {
+        public Criteria andCTimeGreaterThanOrEqualTo(Integer value) {
             addCriterion("c_time >=", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeLessThan(Long value) {
+        public Criteria andCTimeLessThan(Integer value) {
             addCriterion("c_time <", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeLessThanOrEqualTo(Long value) {
+        public Criteria andCTimeLessThanOrEqualTo(Integer value) {
             addCriterion("c_time <=", value, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeIn(List<Long> values) {
+        public Criteria andCTimeIn(List<Integer> values) {
             addCriterion("c_time in", values, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeNotIn(List<Long> values) {
+        public Criteria andCTimeNotIn(List<Integer> values) {
             addCriterion("c_time not in", values, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeBetween(Long value1, Long value2) {
+        public Criteria andCTimeBetween(Integer value1, Integer value2) {
             addCriterion("c_time between", value1, value2, "cTime");
             return (Criteria) this;
         }
 
-        public Criteria andCTimeNotBetween(Long value1, Long value2) {
+        public Criteria andCTimeNotBetween(Integer value1, Integer value2) {
             addCriterion("c_time not between", value1, value2, "cTime");
             return (Criteria) this;
         }

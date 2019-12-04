@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.RolesAllowed;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * @author
+ */
 @RestController
 @RequestMapping("/qiniu")
 public class QiNiuController {
@@ -23,6 +27,7 @@ public class QiNiuController {
 
     @ResponseBody
     @RequestMapping("/upload")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResultVOUtil.error(1,"请选择文件");

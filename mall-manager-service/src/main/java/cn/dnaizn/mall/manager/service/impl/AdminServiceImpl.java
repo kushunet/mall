@@ -1,10 +1,14 @@
 package cn.dnaizn.mall.manager.service.impl;
 
 
+import cn.dnaizn.mall.mapper.*;
+import cn.dnaizn.mall.mq.ActiveMQUtil;
+import cn.dnaizn.mall.pojo.SellerCat;
+import cn.dnaizn.mall.pojo.SellerCatExample;
 import cn.dnaizn.mall.service.AdminService;
+import cn.dnaizn.mall.util.RedisUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import entity.PageResult;
-import cn.dnaizn.mall.mapper.AdminMapper;
 import cn.dnaizn.mall.pojo.Admin;
 import cn.dnaizn.mall.pojo.AdminExample;
 import com.github.pagehelper.Page;
@@ -25,24 +29,24 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     AdminMapper adminMapper;
+    @Autowired
+    SellerMapper sellerMapper;
 
-    /**
-     * 查询全部
-     */
-    @Override
-    public List<Admin> findAll() {
-        return adminMapper.selectByExample(null);
-    }
+    @Autowired
+    SellerBriefMapper sellerBriefMapper;
 
-    /**
-     * 按分页查询
-     */
-    @Override
-    public PageResult findPage(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        Page<Admin> page = (Page<Admin>) adminMapper.selectByExample(null);
-        return new PageResult(page.getTotal(), page.getResult());
-    }
+    @Autowired
+    SellerCatMapper sellerCatMapper;
+
+    @Autowired
+    RedisUtil redisUtil;
+
+    @Autowired
+    ActiveMQUtil activeMQUtil;
+
+    @Autowired
+    SellerExamineMapper sellerExamineMapper;
+
 
     /**
      * 增加
@@ -72,36 +76,80 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.selectByPrimaryKey(id);
     }
 
-    /**
-     * 批量删除
-     */
+
     @Override
-    public void delete(String[] ids) {
-        for (String id : ids) {
-            adminMapper.deleteByPrimaryKey(id);
-        }
+    public List<SellerCat> findByParentId(Long parentId) {
+        SellerCatExample example=new SellerCatExample();
+        SellerCatExample.Criteria criteria = example.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        example.setOrderByClause("sort_order");
+        return sellerCatMapper.selectByExample(example);
     }
 
-
     @Override
-    public PageResult findPage(Admin admin, int pageNum, int pageSize) {
+    public PageResult findPage(SellerCat sellerCat, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
 
-        AdminExample example = new AdminExample();
-        AdminExample.Criteria criteria = example.createCriteria();
+        SellerCatExample example = new SellerCatExample();
+        SellerCatExample.Criteria criteria = example.createCriteria();
 
-        if (admin != null) {
-            if (admin.getAdminId() != null && admin.getAdminId().length() > 0) {
-                criteria.andAdminIdLike("%" + admin.getAdminId() + "%");
+        if (sellerCat != null) {
+            if (sellerCat.getName() != null && sellerCat.getName().length() > 0) {
+                criteria.andNameLike("%" + sellerCat.getName() + "%");
             }
-            if (admin.getPassword() != null && admin.getPassword().length() > 0) {
-                criteria.andPasswordLike("%" + admin.getPassword() + "%");
+            if (sellerCat.getPic() != null && sellerCat.getPic().length() > 0) {
+                criteria.andPicLike("%" + sellerCat.getPic() + "%");
             }
 
         }
 
-        Page<Admin> page = (Page<Admin>) adminMapper.selectByExample(example);
+        Page<SellerCat> page = (Page<SellerCat>) sellerCatMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    @Override
+    public void delete(Long[] ids) {
+        for(Long id:ids){
+            List<SellerCat> sellerCatList = findByParentId(id);
+            for(SellerCat item:sellerCatList){
+                List<SellerCat> sellerCats = findByParentId(item.getId());
+                for (SellerCat i:sellerCats){
+                    sellerCatMapper.deleteByPrimaryKey(i.getId());
+                }
+                sellerCatMapper.deleteByPrimaryKey(item.getId());
+            }
+            sellerCatMapper.deleteByPrimaryKey(id);
+        }
+    }
+
+    @Override
+    public SellerCat findOne(Long id) {
+        return sellerCatMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void update(SellerCat sellerCat) {
+        sellerCatMapper.updateByPrimaryKey(sellerCat);
+    }
+
+    @Override
+    public void add(SellerCat sellerCat) {
+        SellerCatExample example = new SellerCatExample();
+        SellerCatExample.Criteria criteria = example.createCriteria();
+        criteria.andParentIdEqualTo(sellerCat.getParentId());
+        sellerCat.setSortOrder(sellerCatMapper.countByExample(example));
+        sellerCatMapper.insert(sellerCat);
+    }
+
+    @Override
+    public List<SellerCat> findAll() {
+        return sellerCatMapper.selectByExample(null);
+    }
+
+    @Override
+    public PageResult findPage(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Page<SellerCat> page = (Page<SellerCat>) sellerCatMapper.selectByExample(null);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
 }

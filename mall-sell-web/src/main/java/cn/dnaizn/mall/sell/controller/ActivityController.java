@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
+
+/**
+ * @author GT62VR
+ */
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {
@@ -21,6 +26,7 @@ public class ActivityController {
     FullReductionService fullReductionService;
 
     @RequestMapping("/addDiscount")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO addDiscount(@RequestBody Discount discount) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         discount.setSellerId(sellerId);
@@ -34,6 +40,7 @@ public class ActivityController {
     }
 
     @RequestMapping("/findAllDiscount")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO findAllDiscount() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResultVOUtil.success(discountServices.findAll(sellerId));
@@ -41,6 +48,7 @@ public class ActivityController {
     }
 
     @RequestMapping("/deleteDiscount")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO deleteDiscount(Integer[] ids) {
             try {
                 discountServices.delete(ids);
@@ -51,6 +59,7 @@ public class ActivityController {
             }
     }
     @RequestMapping("/rDeleteDiscount")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO rDeleteDiscount(Integer[] ids) {
         try {
             discountServices.rDelete(ids);
@@ -61,6 +70,7 @@ public class ActivityController {
         }
     }
     @RequestMapping("/updateDiscount")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO updateDiscount(@RequestBody Discount discount) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         discount.setSellerId(sellerId);
@@ -75,11 +85,13 @@ public class ActivityController {
 
 
     @RequestMapping("/findAllFullReduction")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO findAllFullReduction() {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResultVOUtil.success(fullReductionService.findAll(sellerId));
     }
     @RequestMapping("/updateFullReduction")
+    @RolesAllowed({"SELLER", "VISITORS"})
     public ResultVO updateFullReduction(@RequestBody FullReduction fullReduction) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         fullReduction.setSellerId(sellerId);

@@ -22,7 +22,7 @@ import java.util.List;
  * @author Administrator
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class SellerCatServiceImpl implements SellerCatService {
 
     @Autowired

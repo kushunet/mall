@@ -2,9 +2,8 @@ package cn.dnaizn.mall.mapper;
 
 import cn.dnaizn.mall.pojo.Admin;
 import cn.dnaizn.mall.pojo.AdminExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface AdminMapper {
     int countByExample(AdminExample example);

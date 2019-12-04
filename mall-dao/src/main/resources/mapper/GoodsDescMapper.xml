@@ -9,7 +9,7 @@
     <result column="introduction" property="introduction" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="packageFee" property="packagefee" jdbcType="DECIMAL" />
-    <result column="c_time" property="cTime" jdbcType="BIGINT" />
+    <result column="c_time" property="cTime" jdbcType="INTEGER" />
     <result column="max_stock" property="maxStock" jdbcType="INTEGER" />
     <result column="is_fill" property="isFill" jdbcType="TINYINT" />
     <result column="discount" property="discount" jdbcType="DECIMAL" />
@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, goods_id, stock, title, introduction, price, packageFee, c_time, max_stock, is_fill, 
+    id, goods_id, stock, title, introduction, price, packageFee, c_time, max_stock, is_fill,
     discount, is_full_reduction
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.GoodsDescExample" >
@@ -92,7 +92,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from goods_desc
     where id = #{id,jdbcType=INTEGER}
@@ -108,14 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.dnaizn.mall.pojo.GoodsDesc" >
-    insert into goods_desc (id, goods_id, stock, 
-      title, introduction, price, 
-      packageFee, c_time, max_stock, 
+    insert into goods_desc (id, goods_id, stock,
+      title, introduction, price,
+      packageFee, c_time, max_stock,
       is_fill, discount, is_full_reduction
       )
-    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, 
-      #{title,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{packagefee,jdbcType=DECIMAL}, #{cTime,jdbcType=BIGINT}, #{maxStock,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER},
+      #{title,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL},
+      #{packagefee,jdbcType=DECIMAL}, #{cTime,jdbcType=INTEGER}, #{maxStock,jdbcType=INTEGER},
       #{isFill,jdbcType=TINYINT}, #{discount,jdbcType=DECIMAL}, #{isFullReduction,jdbcType=TINYINT}
       )
   </insert>
@@ -182,7 +182,7 @@
         #{packagefee,jdbcType=DECIMAL},
       </if>
       <if test="cTime != null" >
-        #{cTime,jdbcType=BIGINT},
+        #{cTime,jdbcType=INTEGER},
       </if>
       <if test="maxStock != null" >
         #{maxStock,jdbcType=INTEGER},
@@ -229,7 +229,7 @@
         packageFee = #{record.packagefee,jdbcType=DECIMAL},
       </if>
       <if test="record.cTime != null" >
-        c_time = #{record.cTime,jdbcType=BIGINT},
+        c_time = #{record.cTime,jdbcType=INTEGER},
       </if>
       <if test="record.maxStock != null" >
         max_stock = #{record.maxStock,jdbcType=INTEGER},
@@ -251,17 +251,17 @@
   <update id="updateByExample" parameterType="map" >
     update goods_desc
     set id = #{record.id,jdbcType=INTEGER},
-      goods_id = #{record.goodsId,jdbcType=INTEGER},
-      stock = #{record.stock,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR},
-      introduction = #{record.introduction,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=DECIMAL},
-      packageFee = #{record.packagefee,jdbcType=DECIMAL},
-      c_time = #{record.cTime,jdbcType=BIGINT},
-      max_stock = #{record.maxStock,jdbcType=INTEGER},
-      is_fill = #{record.isFill,jdbcType=TINYINT},
-      discount = #{record.discount,jdbcType=DECIMAL},
-      is_full_reduction = #{record.isFullReduction,jdbcType=TINYINT}
+    goods_id = #{record.goodsId,jdbcType=INTEGER},
+    stock = #{record.stock,jdbcType=INTEGER},
+    title = #{record.title,jdbcType=VARCHAR},
+    introduction = #{record.introduction,jdbcType=VARCHAR},
+    price = #{record.price,jdbcType=DECIMAL},
+    packageFee = #{record.packagefee,jdbcType=DECIMAL},
+    c_time = #{record.cTime,jdbcType=INTEGER},
+    max_stock = #{record.maxStock,jdbcType=INTEGER},
+    is_fill = #{record.isFill,jdbcType=TINYINT},
+    discount = #{record.discount,jdbcType=DECIMAL},
+    is_full_reduction = #{record.isFullReduction,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -288,7 +288,7 @@
         packageFee = #{packagefee,jdbcType=DECIMAL},
       </if>
       <if test="cTime != null" >
-        c_time = #{cTime,jdbcType=BIGINT},
+        c_time = #{cTime,jdbcType=INTEGER},
       </if>
       <if test="maxStock != null" >
         max_stock = #{maxStock,jdbcType=INTEGER},
@@ -313,7 +313,7 @@
       introduction = #{introduction,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       packageFee = #{packagefee,jdbcType=DECIMAL},
-      c_time = #{cTime,jdbcType=BIGINT},
+      c_time = #{cTime,jdbcType=INTEGER},
       max_stock = #{maxStock,jdbcType=INTEGER},
       is_fill = #{isFill,jdbcType=TINYINT},
       discount = #{discount,jdbcType=DECIMAL},

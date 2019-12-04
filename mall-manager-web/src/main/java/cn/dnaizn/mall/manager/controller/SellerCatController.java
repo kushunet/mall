@@ -1,10 +1,12 @@
 package cn.dnaizn.mall.manager.controller;
 
 import cn.dnaizn.mall.pojo.SellerCat;
+import cn.dnaizn.mall.service.AdminService;
 import cn.dnaizn.mall.service.SellerCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
 import entity.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,15 +23,14 @@ import java.util.List;
 public class SellerCatController {
 
 	@Reference
-	SellerCatService sellerCatService;
-	
+	AdminService adminService;
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
 	@RequestMapping("/findAll")
 	public List<SellerCat> findAll(){
-		return sellerCatService.findAll();
+		return adminService.findAll();
 	}
 	
 	
@@ -39,7 +40,7 @@ public class SellerCatController {
 	 */
 	@RequestMapping("/findPage")
 	public PageResult findPage(int page, int rows){
-		return sellerCatService.findPage(page, rows);
+		return adminService.findPage(page, rows);
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class SellerCatController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody SellerCat sellerCat){
 		try {
-			sellerCatService.add(sellerCat);
+			adminService.add(sellerCat);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,7 +67,7 @@ public class SellerCatController {
 	@RequestMapping("/update")
 	public Result update(@RequestBody SellerCat sellerCat){
 		try {
-			sellerCatService.update(sellerCat);
+			adminService.update(sellerCat);
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +82,7 @@ public class SellerCatController {
 	 */
 	@RequestMapping("/findOne")
 	public SellerCat findOne(Long id){
-		return sellerCatService.findOne(id);		
+		return adminService.findOne(id);
 	}
 	
 	/**
@@ -92,7 +93,7 @@ public class SellerCatController {
 	@RequestMapping("/delete")
 	public Result delete(Long [] ids){
 		try {
-			sellerCatService.delete(ids);
+			adminService.delete(ids);
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -109,7 +110,7 @@ public class SellerCatController {
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody SellerCat sellerCat, int page, int rows  ){
-		return sellerCatService.findPage(sellerCat, page, rows);		
+		return adminService.findPage(sellerCat, page, rows);
 	}
 	/**
 	 * 根据上级Id查询列表
@@ -118,6 +119,6 @@ public class SellerCatController {
 	 */
 	@RequestMapping("/findByParentId")
 	public List<SellerCat> findByParentId(Long parentId) {
-		return sellerCatService.findByParentId(parentId);
+		return adminService.findByParentId(parentId);
 	}
 }

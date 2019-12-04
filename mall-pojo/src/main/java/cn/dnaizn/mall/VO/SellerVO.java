@@ -1,18 +1,18 @@
 package cn.dnaizn.mall.VO;
 
-import cn.dnaizn.mall.pojo.Seller;
-import cn.dnaizn.mall.pojo.SellerBrief;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Data
 public class SellerVO implements Serializable {
+    private String sellerId;
     private String name;
 
     private String nickName;
+
+    private Integer status;
 
     private String email;
 
@@ -39,8 +39,6 @@ public class SellerVO implements Serializable {
     private Long address;
 
     private String logoPic;
-
-    private String brief;
 
     private String legalPerson;
 
@@ -73,4 +71,8 @@ public class SellerVO implements Serializable {
     private Object businessHours;
 
     private Integer isReserve;
+
+    private String notice;
+
+    private String brief;
 }

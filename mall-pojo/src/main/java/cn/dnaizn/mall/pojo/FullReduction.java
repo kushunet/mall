@@ -9,6 +9,8 @@ public class FullReduction implements Serializable {
 
     private Object reduction;
 
+    private Integer isEnable;
+
     public Integer getId() {
         return id;
     }
@@ -31,5 +33,13 @@ public class FullReduction implements Serializable {
 
     public void setReduction(Object reduction) {
         this.reduction = reduction;
+    }
+
+    public Integer getIsEnable() {
+        return isEnable;
+    }
+
+    public void setIsEnable(Integer isEnable) {
+        this.isEnable = isEnable;
     }
 }

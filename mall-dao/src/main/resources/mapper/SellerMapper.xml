@@ -7,6 +7,7 @@
     <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="t_balance" property="tBalance" jdbcType="DECIMAL" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
@@ -88,10 +89,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    seller_id, name, nick_name, password, balance, email, mobile, telephone, status, 
-    delivery_status, address_detail, linkman_name, linkman_qq, linkman_mobile, linkman_email, 
-    license, papers, address, logo_pic, brief, create_time, legal_person, legal_person_card_id, 
-    legal_person_pic, bank_name, bank_user
+    seller_id, name, nick_name, password, balance, t_balance, email, mobile, telephone, 
+    status, delivery_status, address_detail, linkman_name, linkman_qq, linkman_mobile, 
+    linkman_email, license, papers, address, logo_pic, brief, create_time, legal_person, 
+    legal_person_card_id, legal_person_pic, bank_name, bank_user
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.SellerExample" >
     select
@@ -125,23 +126,25 @@
   </delete>
   <insert id="insert" parameterType="cn.dnaizn.mall.pojo.Seller" >
     insert into seller (seller_id, name, nick_name, 
-      password, balance, email, 
-      mobile, telephone, status, 
-      delivery_status, address_detail, linkman_name, 
-      linkman_qq, linkman_mobile, linkman_email, 
-      license, papers, address, 
-      logo_pic, brief, create_time, 
-      legal_person, legal_person_card_id, legal_person_pic, 
-      bank_name, bank_user)
+      password, balance, t_balance, 
+      email, mobile, telephone, 
+      status, delivery_status, address_detail, 
+      linkman_name, linkman_qq, linkman_mobile, 
+      linkman_email, license, papers, 
+      address, logo_pic, brief, 
+      create_time, legal_person, legal_person_card_id, 
+      legal_person_pic, bank_name, bank_user
+      )
     values (#{sellerId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{email,jdbcType=VARCHAR}, 
-      #{mobile,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{deliveryStatus,jdbcType=INTEGER}, #{addressDetail,jdbcType=VARCHAR}, #{linkmanName,jdbcType=VARCHAR}, 
-      #{linkmanQq,jdbcType=VARCHAR}, #{linkmanMobile,jdbcType=VARCHAR}, #{linkmanEmail,jdbcType=VARCHAR}, 
-      #{license,jdbcType=VARCHAR}, #{papers,jdbcType=VARCHAR}, #{address,jdbcType=BIGINT}, 
-      #{logoPic,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{legalPerson,jdbcType=VARCHAR}, #{legalPersonCardId,jdbcType=VARCHAR}, #{legalPersonPic,jdbcType=VARCHAR}, 
-      #{bankName,jdbcType=VARCHAR}, #{bankUser,jdbcType=VARCHAR})
+      #{password,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{tBalance,jdbcType=DECIMAL}, 
+      #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{deliveryStatus,jdbcType=INTEGER}, #{addressDetail,jdbcType=VARCHAR}, 
+      #{linkmanName,jdbcType=VARCHAR}, #{linkmanQq,jdbcType=VARCHAR}, #{linkmanMobile,jdbcType=VARCHAR}, 
+      #{linkmanEmail,jdbcType=VARCHAR}, #{license,jdbcType=VARCHAR}, #{papers,jdbcType=VARCHAR}, 
+      #{address,jdbcType=BIGINT}, #{logoPic,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{legalPerson,jdbcType=VARCHAR}, #{legalPersonCardId,jdbcType=VARCHAR}, 
+      #{legalPersonPic,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{bankUser,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.dnaizn.mall.pojo.Seller" >
     insert into seller
@@ -160,6 +163,9 @@
       </if>
       <if test="balance != null" >
         balance,
+      </if>
+      <if test="tBalance != null" >
+        t_balance,
       </if>
       <if test="email != null" >
         email,
@@ -240,6 +246,9 @@
       </if>
       <if test="balance != null" >
         #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="tBalance != null" >
+        #{tBalance,jdbcType=DECIMAL},
       </if>
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
@@ -330,6 +339,9 @@
       <if test="record.balance != null" >
         balance = #{record.balance,jdbcType=DECIMAL},
       </if>
+      <if test="record.tBalance != null" >
+        t_balance = #{record.tBalance,jdbcType=DECIMAL},
+      </if>
       <if test="record.email != null" >
         email = #{record.email,jdbcType=VARCHAR},
       </if>
@@ -405,6 +417,7 @@
       nick_name = #{record.nickName,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       balance = #{record.balance,jdbcType=DECIMAL},
+      t_balance = #{record.tBalance,jdbcType=DECIMAL},
       email = #{record.email,jdbcType=VARCHAR},
       mobile = #{record.mobile,jdbcType=VARCHAR},
       telephone = #{record.telephone,jdbcType=VARCHAR},
@@ -444,6 +457,9 @@
       </if>
       <if test="balance != null" >
         balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="tBalance != null" >
+        t_balance = #{tBalance,jdbcType=DECIMAL},
       </if>
       <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
@@ -517,6 +533,7 @@
       nick_name = #{nickName,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       balance = #{balance,jdbcType=DECIMAL},
+      t_balance = #{tBalance,jdbcType=DECIMAL},
       email = #{email,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
       telephone = #{telephone,jdbcType=VARCHAR},

@@ -7,7 +7,7 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="salt" property="salt" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
-    <result column="account_balance" property="accountBalance" jdbcType="DECIMAL" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
     <result column="updated" property="updated" jdbcType="TIMESTAMP" />
@@ -86,7 +86,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, username, password, salt, phone, account_balance, email, created, updated, source_type, 
+    id, username, password, salt, phone, balance, email, created, updated, source_type, 
     nick_name, name, status, head_pic, qq, is_mobile_check, is_email_check, sex, user_level, 
     points, experience_value, birthday, last_login_time, open_id
   </sql>
@@ -122,7 +122,7 @@
   </delete>
   <insert id="insert" parameterType="cn.dnaizn.mall.pojo.User" >
     insert into user (id, username, password, 
-      salt, phone, account_balance, 
+      salt, phone, balance, 
       email, created, updated, 
       source_type, nick_name, name, 
       status, head_pic, qq, 
@@ -131,7 +131,7 @@
       birthday, last_login_time, open_id
       )
     values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{accountBalance,jdbcType=DECIMAL}, 
+      #{salt,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, 
       #{email,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}, 
       #{sourceType,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{headPic,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, 
@@ -158,8 +158,8 @@
       <if test="phone != null" >
         phone,
       </if>
-      <if test="accountBalance != null" >
-        account_balance,
+      <if test="balance != null" >
+        balance,
       </if>
       <if test="email != null" >
         email,
@@ -232,8 +232,8 @@
       <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="accountBalance != null" >
-        #{accountBalance,jdbcType=DECIMAL},
+      <if test="balance != null" >
+        #{balance,jdbcType=DECIMAL},
       </if>
       <if test="email != null" >
         #{email,jdbcType=VARCHAR},
@@ -315,8 +315,8 @@
       <if test="record.phone != null" >
         phone = #{record.phone,jdbcType=VARCHAR},
       </if>
-      <if test="record.accountBalance != null" >
-        account_balance = #{record.accountBalance,jdbcType=DECIMAL},
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=DECIMAL},
       </if>
       <if test="record.email != null" >
         email = #{record.email,jdbcType=VARCHAR},
@@ -384,7 +384,7 @@
       password = #{record.password,jdbcType=VARCHAR},
       salt = #{record.salt,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
-      account_balance = #{record.accountBalance,jdbcType=DECIMAL},
+      balance = #{record.balance,jdbcType=DECIMAL},
       email = #{record.email,jdbcType=VARCHAR},
       created = #{record.created,jdbcType=TIMESTAMP},
       updated = #{record.updated,jdbcType=TIMESTAMP},
@@ -422,8 +422,8 @@
       <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="accountBalance != null" >
-        account_balance = #{accountBalance,jdbcType=DECIMAL},
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=DECIMAL},
       </if>
       <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
@@ -488,7 +488,7 @@
       password = #{password,jdbcType=VARCHAR},
       salt = #{salt,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      account_balance = #{accountBalance,jdbcType=DECIMAL},
+      balance = #{balance,jdbcType=DECIMAL},
       email = #{email,jdbcType=VARCHAR},
       created = #{created,jdbcType=TIMESTAMP},
       updated = #{updated,jdbcType=TIMESTAMP},

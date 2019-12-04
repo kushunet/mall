@@ -293,6 +293,66 @@ public class FullReductionExample {
             addCriterion("reduction not between", value1, value2, "reduction");
             return (Criteria) this;
         }
+
+        public Criteria andIsEnableIsNull() {
+            addCriterion("is_enable is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableIsNotNull() {
+            addCriterion("is_enable is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableEqualTo(Integer value) {
+            addCriterion("is_enable =", value, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableNotEqualTo(Integer value) {
+            addCriterion("is_enable <>", value, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableGreaterThan(Integer value) {
+            addCriterion("is_enable >", value, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_enable >=", value, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableLessThan(Integer value) {
+            addCriterion("is_enable <", value, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableLessThanOrEqualTo(Integer value) {
+            addCriterion("is_enable <=", value, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableIn(List<Integer> values) {
+            addCriterion("is_enable in", values, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableNotIn(List<Integer> values) {
+            addCriterion("is_enable not in", values, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableBetween(Integer value1, Integer value2) {
+            addCriterion("is_enable between", value1, value2, "isEnable");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnableNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_enable not between", value1, value2, "isEnable");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

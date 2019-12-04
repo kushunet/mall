@@ -1,7 +1,7 @@
 package cn.dnaizn.mall.manager.controller;
 
 import cn.dnaizn.mall.pojo.Seller;
-import cn.dnaizn.mall.service.SellerService;
+import cn.dnaizn.mall.service.AdminSellerService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
 import entity.Result;
@@ -21,7 +21,7 @@ import java.util.List;
 public class SellerController {
 
 	@Reference
-	SellerService sellerService;
+	AdminSellerService sellerService;
 
 	/**
 	 * 返回全部列表

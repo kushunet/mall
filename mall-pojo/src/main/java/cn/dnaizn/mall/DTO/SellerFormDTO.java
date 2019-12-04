@@ -11,6 +11,8 @@ public class SellerFormDTO implements Serializable {
     private String sellerId;
     //店铺名
     private String nickName;
+    //头像
+    private String avatar;
     //联系人姓名
     private String linkmanName;
     //联系人电话

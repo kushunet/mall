@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import cn.dnaizn.mall.service.SellerBriefService;
 
 import entity.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -17,6 +18,7 @@ import entity.PageResult;
  *
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SellerBriefServiceImpl implements SellerBriefService {
 
 	@Autowired
@@ -54,7 +56,7 @@ public class SellerBriefServiceImpl implements SellerBriefService {
 	 */
 	@Override
 	public void update(SellerBrief sellerBrief){
-		sellerBriefMapper.updateByPrimaryKey(sellerBrief);
+		sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
 	}	
 	
 	/**

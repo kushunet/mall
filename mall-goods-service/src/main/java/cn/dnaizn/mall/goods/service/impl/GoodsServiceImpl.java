@@ -10,7 +10,9 @@ import cn.dnaizn.mall.pojo.Goods;
 import cn.dnaizn.mall.pojo.GoodsDesc;
 import cn.dnaizn.mall.pojo.GoodsDescExample;
 import cn.dnaizn.mall.pojo.GoodsExample;
+import cn.dnaizn.mall.util.RedisUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,13 @@ import cn.dnaizn.mall.service.GoodsService;
 
 import entity.PageResult;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -36,8 +41,12 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     GoodsMapper goodsMapper;
+
     @Autowired
     GoodsDescMapper goodsDescMapper;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     /**
      * 查询全部
@@ -75,7 +84,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void add(GoodsDTO goodsDTO) {
-        goodsDTO.getGoods().setCTime(System.currentTimeMillis() / 1000);
+        goodsDTO.getGoods().setcTime(System.currentTimeMillis() / 1000);
         goodsDTO.getGoods().setIsMarketable(0);
         GoodsExample example = new GoodsExample();
         GoodsExample.Criteria criteria = example.createCriteria();
@@ -89,10 +98,20 @@ public class GoodsServiceImpl implements GoodsService {
         goodsMapper.insert(goodsDTO.getGoods());
         for (GoodsDesc item : goodsDTO.getGoodsDescList()) {
             item.setGoodsId(goodsDTO.getGoods().getId());
-            item.setcTime(Long.parseLong(String.valueOf(System.currentTimeMillis()).substring(0, 10)));
+            item.setcTime(Integer.parseInt(String.valueOf(System.currentTimeMillis()).substring(0, 10)));
             item.setIntroduction(goodsDTO.getGoods().getTitle() + item.getTitle());
             goodsDescMapper.insert(item);
         }
+        Jedis jedis = redisUtil.getJedis();
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", "1");
+        Map<String, String> m = new HashMap<>();
+        m.put("type", "goods_change");
+        m.put("id", goodsDTO.getGoods().getId().toString());
+        m.put("status_cn", "商品增加！！");
+        map.put("data", m);
+        jedis.publish("mall.message", JSONObject.toJSONString(map));
+        jedis.close();
     }
 
     @Override
@@ -122,12 +141,22 @@ public class GoodsServiceImpl implements GoodsService {
         criteria.andGoodsIdEqualTo(goodsDTO.getGoods().getId());
         goodsMapper.updateByPrimaryKeySelective(goodsDTO.getGoods());
         goodsDescMapper.deleteByExample(example);
-        for (GoodsDesc item:goodsDTO.getGoodsDescList()){
+        for (GoodsDesc item : goodsDTO.getGoodsDescList()) {
             item.setGoodsId(goodsDTO.getGoods().getId());
-            item.setcTime(Long.parseLong(String.valueOf(System.currentTimeMillis()).substring(0, 10)));
+            item.setcTime(Integer.parseInt(String.valueOf(System.currentTimeMillis()).substring(0, 10)));
             item.setIntroduction(goodsDTO.getGoods().getTitle() + item.getTitle());
             goodsDescMapper.insert(item);
         }
+        Jedis jedis = redisUtil.getJedis();
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", "3");
+        Map<String, String> m = new HashMap<>();
+        m.put("type", "goods_change");
+        m.put("id", goodsDTO.getGoods().getId().toString());
+        m.put("status_cn", "商品修改！！");
+        map.put("data", m);
+        jedis.publish("mall.message", JSONObject.toJSONString(map));
+        jedis.close();
     }
 
     /**
@@ -157,6 +186,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * 根据ID获取实体
+     *
      * @param sellerId
      * @return
      */
@@ -179,6 +209,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void delete(Integer[] ids) {
+        Jedis jedis = redisUtil.getJedis();
         for (Integer id : ids) {
             Goods goods = goodsMapper.selectByPrimaryKey(id);
             goodsMapper.deleteByPrimaryKey(id);
@@ -186,16 +217,35 @@ public class GoodsServiceImpl implements GoodsService {
             GoodsDescExample.Criteria criteria = example.createCriteria();
             criteria.andGoodsIdEqualTo(goods.getId());
             goodsDescMapper.deleteByExample(example);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "2");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品删除！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
     @Override
     public void rDelete(Integer[] ids) {
+        Jedis jedis = redisUtil.getJedis();
         for (Integer id : ids) {
             Goods goods = goodsMapper.selectByPrimaryKey(id);
             goods.setIsDelete(Integer.parseInt(String.valueOf(System.currentTimeMillis()).substring(0, 10)));
             goodsMapper.updateByPrimaryKey(goods);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "2");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品删除！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
     @Override
@@ -230,6 +280,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public void updateMarketable(Integer[] ids, Integer type, String sellerId) {
+        Jedis jedis = redisUtil.getJedis();
         for (Integer id : ids) {
             Goods goods = goodsMapper.selectByPrimaryKey(id);
             if (!goods.getSellerId().equals(sellerId)) {
@@ -241,7 +292,17 @@ public class GoodsServiceImpl implements GoodsService {
                 goods.setIsMarketable(Integer.parseInt(String.valueOf(System.currentTimeMillis()).substring(0, 10)));
             }
             goodsMapper.updateByPrimaryKey(goods);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "3");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品修改！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
 
@@ -255,6 +316,16 @@ public class GoodsServiceImpl implements GoodsService {
         goodsDesc.setStock(stock);
         goodsDesc.setMaxStock(maxStock);
         goodsDescMapper.updateByPrimaryKey(goodsDesc);
+        Jedis jedis = redisUtil.getJedis();
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", "3");
+        Map<String, String> m = new HashMap<>();
+        m.put("type", "goods_change");
+        m.put("id", id.toString());
+        m.put("status_cn", "商品修改！！");
+        map.put("data", m);
+        jedis.publish("mall.message", JSONObject.toJSONString(map));
+        jedis.close();
     }
 
     @Override
@@ -267,6 +338,16 @@ public class GoodsServiceImpl implements GoodsService {
         goodsDesc.setPrice(price);
         goodsDesc.setPackagefee(packagefee);
         goodsDescMapper.updateByPrimaryKey(goodsDesc);
+        Jedis jedis = redisUtil.getJedis();
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", "3");
+        Map<String, String> m = new HashMap<>();
+        m.put("type", "goods_change");
+        m.put("id", id.toString());
+        m.put("status_cn", "商品修改！！");
+        map.put("data", m);
+        jedis.publish("mall.message", JSONObject.toJSONString(map));
+        jedis.close();
     }
 
     @Override
@@ -281,24 +362,45 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsDesc> goodsDescList = goodsDescMapper.selectByExample(example);
         goods.setTitle(title);
         goodsMapper.updateByPrimaryKey(goods);
-        for (GoodsDesc item:goodsDescList){
-            item.setIntroduction(goods.getTitle()+item.getTitle());
+        Jedis jedis = redisUtil.getJedis();
+        for (GoodsDesc item : goodsDescList) {
+            item.setIntroduction(goods.getTitle() + item.getTitle());
             goodsDescMapper.updateByPrimaryKey(item);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "3");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品修改！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
     @Override
     public void upSortOrder(Integer[] ids) {
         int i = 1;
+        Jedis jedis = redisUtil.getJedis();
         for (Integer id : ids) {
             Goods goods = goodsMapper.selectByPrimaryKey(id);
             goods.setSortOrder(i++);
             goodsMapper.updateByPrimaryKey(goods);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "3");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品修改！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
     @Override
     public void updateFilly(Integer[] ids, String sellerId) {
+        Jedis jedis = redisUtil.getJedis();
         for (Integer id : ids) {
             GoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(id);
             Goods goods = goodsMapper.selectByPrimaryKey(goodsDesc.getGoodsId());
@@ -307,11 +409,21 @@ public class GoodsServiceImpl implements GoodsService {
             }
             goodsDesc.setStock(goodsDesc.getMaxStock());
             goodsDescMapper.updateByPrimaryKey(goodsDesc);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "3");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品修改！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
     @Override
     public void updateEmpty(Integer[] ids, String sellerId) {
+        Jedis jedis = redisUtil.getJedis();
         for (Integer id : ids) {
             GoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(id);
             Goods goods = goodsMapper.selectByPrimaryKey(goodsDesc.getGoodsId());
@@ -320,12 +432,22 @@ public class GoodsServiceImpl implements GoodsService {
             }
             goodsDesc.setStock(0);
             goodsDescMapper.updateByPrimaryKey(goodsDesc);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "3");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品修改！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 
     @Override
-    public void updateCategory(Integer[] ids, Integer topCategory, Integer secondCategory,String sellerId) {
-        for (Integer id : ids){
+    public void updateCategory(Integer[] ids, Integer topCategory, Integer secondCategory, String sellerId) {
+        Jedis jedis = redisUtil.getJedis();
+        for (Integer id : ids) {
             Goods goods = goodsMapper.selectByPrimaryKey(id);
             if (!goods.getSellerId().equals(sellerId)) {
                 throw new MallException(1, "该商品不属于该用户");
@@ -334,6 +456,15 @@ public class GoodsServiceImpl implements GoodsService {
             goods.setTopCategory(topCategory);
             goods.setSecondCategory(secondCategory);
             goodsMapper.updateByPrimaryKey(goods);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", "3");
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "goods_change");
+            m.put("id", id.toString());
+            m.put("status_cn", "商品修改！！");
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
         }
+        jedis.close();
     }
 }

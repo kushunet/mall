@@ -2,9 +2,8 @@ package cn.dnaizn.mall.mapper;
 
 import cn.dnaizn.mall.pojo.SellerCat;
 import cn.dnaizn.mall.pojo.SellerCatExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface SellerCatMapper {
     int countByExample(SellerCatExample example);

@@ -175,273 +175,123 @@ public class AddressExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(String value) {
+        public Criteria andUserIdEqualTo(Integer value) {
             addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(String value) {
+        public Criteria andUserIdNotEqualTo(Integer value) {
             addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(String value) {
+        public Criteria andUserIdGreaterThan(Integer value) {
             addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(String value) {
+        public Criteria andUserIdLessThan(Integer value) {
             addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(String value) {
+        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
             addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLike(String value) {
-            addCriterion("user_id like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotLike(String value) {
-            addCriterion("user_id not like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIn(List<String> values) {
+        public Criteria andUserIdIn(List<Integer> values) {
             addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<String> values) {
+        public Criteria andUserIdNotIn(List<Integer> values) {
             addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(String value1, String value2) {
+        public Criteria andUserIdBetween(Integer value1, Integer value2) {
             addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(String value1, String value2) {
+        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdIsNull() {
-            addCriterion("province_id is null");
+        public Criteria andIsDefaultIsNull() {
+            addCriterion("is_default is null");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdIsNotNull() {
-            addCriterion("province_id is not null");
+        public Criteria andIsDefaultIsNotNull() {
+            addCriterion("is_default is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdEqualTo(String value) {
-            addCriterion("province_id =", value, "provinceId");
+        public Criteria andIsDefaultEqualTo(String value) {
+            addCriterion("is_default =", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdNotEqualTo(String value) {
-            addCriterion("province_id <>", value, "provinceId");
+        public Criteria andIsDefaultNotEqualTo(String value) {
+            addCriterion("is_default <>", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdGreaterThan(String value) {
-            addCriterion("province_id >", value, "provinceId");
+        public Criteria andIsDefaultGreaterThan(String value) {
+            addCriterion("is_default >", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdGreaterThanOrEqualTo(String value) {
-            addCriterion("province_id >=", value, "provinceId");
+        public Criteria andIsDefaultGreaterThanOrEqualTo(String value) {
+            addCriterion("is_default >=", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdLessThan(String value) {
-            addCriterion("province_id <", value, "provinceId");
+        public Criteria andIsDefaultLessThan(String value) {
+            addCriterion("is_default <", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdLessThanOrEqualTo(String value) {
-            addCriterion("province_id <=", value, "provinceId");
+        public Criteria andIsDefaultLessThanOrEqualTo(String value) {
+            addCriterion("is_default <=", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdLike(String value) {
-            addCriterion("province_id like", value, "provinceId");
+        public Criteria andIsDefaultLike(String value) {
+            addCriterion("is_default like", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdNotLike(String value) {
-            addCriterion("province_id not like", value, "provinceId");
+        public Criteria andIsDefaultNotLike(String value) {
+            addCriterion("is_default not like", value, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdIn(List<String> values) {
-            addCriterion("province_id in", values, "provinceId");
+        public Criteria andIsDefaultIn(List<String> values) {
+            addCriterion("is_default in", values, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdNotIn(List<String> values) {
-            addCriterion("province_id not in", values, "provinceId");
+        public Criteria andIsDefaultNotIn(List<String> values) {
+            addCriterion("is_default not in", values, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdBetween(String value1, String value2) {
-            addCriterion("province_id between", value1, value2, "provinceId");
+        public Criteria andIsDefaultBetween(String value1, String value2) {
+            addCriterion("is_default between", value1, value2, "isDefault");
             return (Criteria) this;
         }
 
-        public Criteria andProvinceIdNotBetween(String value1, String value2) {
-            addCriterion("province_id not between", value1, value2, "provinceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdIsNull() {
-            addCriterion("city_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdIsNotNull() {
-            addCriterion("city_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdEqualTo(String value) {
-            addCriterion("city_id =", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdNotEqualTo(String value) {
-            addCriterion("city_id <>", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdGreaterThan(String value) {
-            addCriterion("city_id >", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdGreaterThanOrEqualTo(String value) {
-            addCriterion("city_id >=", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdLessThan(String value) {
-            addCriterion("city_id <", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdLessThanOrEqualTo(String value) {
-            addCriterion("city_id <=", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdLike(String value) {
-            addCriterion("city_id like", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdNotLike(String value) {
-            addCriterion("city_id not like", value, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdIn(List<String> values) {
-            addCriterion("city_id in", values, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdNotIn(List<String> values) {
-            addCriterion("city_id not in", values, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdBetween(String value1, String value2) {
-            addCriterion("city_id between", value1, value2, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCityIdNotBetween(String value1, String value2) {
-            addCriterion("city_id not between", value1, value2, "cityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdIsNull() {
-            addCriterion("town_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdIsNotNull() {
-            addCriterion("town_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdEqualTo(String value) {
-            addCriterion("town_id =", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdNotEqualTo(String value) {
-            addCriterion("town_id <>", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdGreaterThan(String value) {
-            addCriterion("town_id >", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdGreaterThanOrEqualTo(String value) {
-            addCriterion("town_id >=", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdLessThan(String value) {
-            addCriterion("town_id <", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdLessThanOrEqualTo(String value) {
-            addCriterion("town_id <=", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdLike(String value) {
-            addCriterion("town_id like", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdNotLike(String value) {
-            addCriterion("town_id not like", value, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdIn(List<String> values) {
-            addCriterion("town_id in", values, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdNotIn(List<String> values) {
-            addCriterion("town_id not in", values, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdBetween(String value1, String value2) {
-            addCriterion("town_id between", value1, value2, "townId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTownIdNotBetween(String value1, String value2) {
-            addCriterion("town_id not between", value1, value2, "townId");
+        public Criteria andIsDefaultNotBetween(String value1, String value2) {
+            addCriterion("is_default not between", value1, value2, "isDefault");
             return (Criteria) this;
         }
 
@@ -512,6 +362,76 @@ public class AddressExample {
 
         public Criteria andMobileNotBetween(String value1, String value2) {
             addCriterion("mobile not between", value1, value2, "mobile");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeIsNull() {
+            addCriterion("adcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeIsNotNull() {
+            addCriterion("adcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeEqualTo(String value) {
+            addCriterion("adcode =", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeNotEqualTo(String value) {
+            addCriterion("adcode <>", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeGreaterThan(String value) {
+            addCriterion("adcode >", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("adcode >=", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeLessThan(String value) {
+            addCriterion("adcode <", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeLessThanOrEqualTo(String value) {
+            addCriterion("adcode <=", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeLike(String value) {
+            addCriterion("adcode like", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeNotLike(String value) {
+            addCriterion("adcode not like", value, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeIn(List<String> values) {
+            addCriterion("adcode in", values, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeNotIn(List<String> values) {
+            addCriterion("adcode not in", values, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeBetween(String value1, String value2) {
+            addCriterion("adcode between", value1, value2, "adcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdcodeNotBetween(String value1, String value2) {
+            addCriterion("adcode not between", value1, value2, "adcode");
             return (Criteria) this;
         }
 
@@ -655,143 +575,73 @@ public class AddressExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultIsNull() {
-            addCriterion("is_default is null");
+        public Criteria andPointIsNull() {
+            addCriterion("point is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultIsNotNull() {
-            addCriterion("is_default is not null");
+        public Criteria andPointIsNotNull() {
+            addCriterion("point is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultEqualTo(String value) {
-            addCriterion("is_default =", value, "isDefault");
+        public Criteria andPointEqualTo(String value) {
+            addCriterion("point =", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotEqualTo(String value) {
-            addCriterion("is_default <>", value, "isDefault");
+        public Criteria andPointNotEqualTo(String value) {
+            addCriterion("point <>", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultGreaterThan(String value) {
-            addCriterion("is_default >", value, "isDefault");
+        public Criteria andPointGreaterThan(String value) {
+            addCriterion("point >", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultGreaterThanOrEqualTo(String value) {
-            addCriterion("is_default >=", value, "isDefault");
+        public Criteria andPointGreaterThanOrEqualTo(String value) {
+            addCriterion("point >=", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultLessThan(String value) {
-            addCriterion("is_default <", value, "isDefault");
+        public Criteria andPointLessThan(String value) {
+            addCriterion("point <", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultLessThanOrEqualTo(String value) {
-            addCriterion("is_default <=", value, "isDefault");
+        public Criteria andPointLessThanOrEqualTo(String value) {
+            addCriterion("point <=", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultLike(String value) {
-            addCriterion("is_default like", value, "isDefault");
+        public Criteria andPointLike(String value) {
+            addCriterion("point like", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotLike(String value) {
-            addCriterion("is_default not like", value, "isDefault");
+        public Criteria andPointNotLike(String value) {
+            addCriterion("point not like", value, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultIn(List<String> values) {
-            addCriterion("is_default in", values, "isDefault");
+        public Criteria andPointIn(List<String> values) {
+            addCriterion("point in", values, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotIn(List<String> values) {
-            addCriterion("is_default not in", values, "isDefault");
+        public Criteria andPointNotIn(List<String> values) {
+            addCriterion("point not in", values, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultBetween(String value1, String value2) {
-            addCriterion("is_default between", value1, value2, "isDefault");
+        public Criteria andPointBetween(String value1, String value2) {
+            addCriterion("point between", value1, value2, "point");
             return (Criteria) this;
         }
 
-        public Criteria andIsDefaultNotBetween(String value1, String value2) {
-            addCriterion("is_default not between", value1, value2, "isDefault");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesIsNull() {
-            addCriterion("notes is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesIsNotNull() {
-            addCriterion("notes is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesEqualTo(String value) {
-            addCriterion("notes =", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesNotEqualTo(String value) {
-            addCriterion("notes <>", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesGreaterThan(String value) {
-            addCriterion("notes >", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesGreaterThanOrEqualTo(String value) {
-            addCriterion("notes >=", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesLessThan(String value) {
-            addCriterion("notes <", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesLessThanOrEqualTo(String value) {
-            addCriterion("notes <=", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesLike(String value) {
-            addCriterion("notes like", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesNotLike(String value) {
-            addCriterion("notes not like", value, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesIn(List<String> values) {
-            addCriterion("notes in", values, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesNotIn(List<String> values) {
-            addCriterion("notes not in", values, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesBetween(String value1, String value2) {
-            addCriterion("notes between", value1, value2, "notes");
-            return (Criteria) this;
-        }
-
-        public Criteria andNotesNotBetween(String value1, String value2) {
-            addCriterion("notes not between", value1, value2, "notes");
+        public Criteria andPointNotBetween(String value1, String value2) {
+            addCriterion("point not between", value1, value2, "point");
             return (Criteria) this;
         }
 
@@ -852,76 +702,6 @@ public class AddressExample {
 
         public Criteria andCreateDateNotBetween(Date value1, Date value2) {
             addCriterion("create_date not between", value1, value2, "createDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasIsNull() {
-            addCriterion("alias is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasIsNotNull() {
-            addCriterion("alias is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasEqualTo(String value) {
-            addCriterion("alias =", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasNotEqualTo(String value) {
-            addCriterion("alias <>", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasGreaterThan(String value) {
-            addCriterion("alias >", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasGreaterThanOrEqualTo(String value) {
-            addCriterion("alias >=", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasLessThan(String value) {
-            addCriterion("alias <", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasLessThanOrEqualTo(String value) {
-            addCriterion("alias <=", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasLike(String value) {
-            addCriterion("alias like", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasNotLike(String value) {
-            addCriterion("alias not like", value, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasIn(List<String> values) {
-            addCriterion("alias in", values, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasNotIn(List<String> values) {
-            addCriterion("alias not in", values, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasBetween(String value1, String value2) {
-            addCriterion("alias between", value1, value2, "alias");
-            return (Criteria) this;
-        }
-
-        public Criteria andAliasNotBetween(String value1, String value2) {
-            addCriterion("alias not between", value1, value2, "alias");
             return (Criteria) this;
         }
     }

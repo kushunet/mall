@@ -11,8 +11,11 @@
     <result column="total" property="total" jdbcType="DECIMAL" />
     <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
     <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="post_fee_seller" property="postFeeSeller" jdbcType="DECIMAL" />
     <result column="is_evaluate" property="isEvaluate" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="after_sale" property="afterSale" jdbcType="INTEGER" />
+    <result column="fixed_time" property="fixedTime" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
@@ -94,10 +97,10 @@
   </sql>
   <sql id="Base_Column_List" >
     order_id, seller_id, day_sn, user_id, c_timestamp, payment, total, payment_type, 
-    post_fee, is_evaluate, status, create_time, update_time, payment_time, consign_time, 
-    end_time, close_time, shipping_name, shipping_code, buyer_message, buyer_nick, buyer_rate, 
-    receiver_area_name, receiver_mobile, receiver_zip_code, receiver, receiver_location, 
-    expire, invoice_type, source_type, reserve_time
+    post_fee, post_fee_seller, is_evaluate, status, after_sale, fixed_time, create_time, 
+    update_time, payment_time, consign_time, end_time, close_time, shipping_name, shipping_code, 
+    buyer_message, buyer_nick, buyer_rate, receiver_area_name, receiver_mobile, receiver_zip_code, 
+    receiver, receiver_location, expire, invoice_type, source_type, reserve_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.dnaizn.mall.pojo.OrderMainExample" >
     select
@@ -133,7 +136,8 @@
     insert into order_main (order_id, seller_id, day_sn, 
       user_id, c_timestamp, payment, 
       total, payment_type, post_fee, 
-      is_evaluate, status, create_time, 
+      post_fee_seller, is_evaluate, status, 
+      after_sale, fixed_time, create_time, 
       update_time, payment_time, consign_time, 
       end_time, close_time, shipping_name, 
       shipping_code, buyer_message, buyer_nick, 
@@ -144,7 +148,8 @@
     values (#{orderId,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, #{daySn,jdbcType=INTEGER}, 
       #{userId,jdbcType=INTEGER}, #{cTimestamp,jdbcType=INTEGER}, #{payment,jdbcType=DECIMAL}, 
       #{total,jdbcType=DECIMAL}, #{paymentType,jdbcType=INTEGER}, #{postFee,jdbcType=DECIMAL}, 
-      #{isEvaluate,jdbcType=TINYINT}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{postFeeSeller,jdbcType=DECIMAL}, #{isEvaluate,jdbcType=TINYINT}, #{status,jdbcType=INTEGER}, 
+      #{afterSale,jdbcType=INTEGER}, #{fixedTime,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, #{consignTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, #{shippingName,jdbcType=VARCHAR}, 
       #{shippingCode,jdbcType=VARCHAR}, #{buyerMessage,jdbcType=VARCHAR}, #{buyerNick,jdbcType=VARCHAR}, 
@@ -183,11 +188,20 @@
       <if test="postFee != null" >
         post_fee,
       </if>
+      <if test="postFeeSeller != null" >
+        post_fee_seller,
+      </if>
       <if test="isEvaluate != null" >
         is_evaluate,
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="afterSale != null" >
+        after_sale,
+      </if>
+      <if test="fixedTime != null" >
+        fixed_time,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -278,11 +292,20 @@
       <if test="postFee != null" >
         #{postFee,jdbcType=DECIMAL},
       </if>
+      <if test="postFeeSeller != null" >
+        #{postFeeSeller,jdbcType=DECIMAL},
+      </if>
       <if test="isEvaluate != null" >
         #{isEvaluate,jdbcType=TINYINT},
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="afterSale != null" >
+        #{afterSale,jdbcType=INTEGER},
+      </if>
+      <if test="fixedTime != null" >
+        #{fixedTime,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -382,11 +405,20 @@
       <if test="record.postFee != null" >
         post_fee = #{record.postFee,jdbcType=DECIMAL},
       </if>
+      <if test="record.postFeeSeller != null" >
+        post_fee_seller = #{record.postFeeSeller,jdbcType=DECIMAL},
+      </if>
       <if test="record.isEvaluate != null" >
         is_evaluate = #{record.isEvaluate,jdbcType=TINYINT},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.afterSale != null" >
+        after_sale = #{record.afterSale,jdbcType=INTEGER},
+      </if>
+      <if test="record.fixedTime != null" >
+        fixed_time = #{record.fixedTime,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -464,8 +496,11 @@
       total = #{record.total,jdbcType=DECIMAL},
       payment_type = #{record.paymentType,jdbcType=INTEGER},
       post_fee = #{record.postFee,jdbcType=DECIMAL},
+      post_fee_seller = #{record.postFeeSeller,jdbcType=DECIMAL},
       is_evaluate = #{record.isEvaluate,jdbcType=TINYINT},
       status = #{record.status,jdbcType=INTEGER},
+      after_sale = #{record.afterSale,jdbcType=INTEGER},
+      fixed_time = #{record.fixedTime,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       payment_time = #{record.paymentTime,jdbcType=TIMESTAMP},
@@ -517,11 +552,20 @@
       <if test="postFee != null" >
         post_fee = #{postFee,jdbcType=DECIMAL},
       </if>
+      <if test="postFeeSeller != null" >
+        post_fee_seller = #{postFeeSeller,jdbcType=DECIMAL},
+      </if>
       <if test="isEvaluate != null" >
         is_evaluate = #{isEvaluate,jdbcType=TINYINT},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="afterSale != null" >
+        after_sale = #{afterSale,jdbcType=INTEGER},
+      </if>
+      <if test="fixedTime != null" >
+        fixed_time = #{fixedTime,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -596,8 +640,11 @@
       total = #{total,jdbcType=DECIMAL},
       payment_type = #{paymentType,jdbcType=INTEGER},
       post_fee = #{postFee,jdbcType=DECIMAL},
+      post_fee_seller = #{postFeeSeller,jdbcType=DECIMAL},
       is_evaluate = #{isEvaluate,jdbcType=TINYINT},
       status = #{status,jdbcType=INTEGER},
+      after_sale = #{afterSale,jdbcType=INTEGER},
+      fixed_time = #{fixedTime,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},

@@ -4,7 +4,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 import java.util.Objects;
-
+@SuppressWarnings("unchecked")
 public class ListUtils<T> {
     public void copyList(Object obj, List<T> list2, Class<T> classObj) {
         if ((!Objects.isNull(obj)) && (!Objects.isNull(list2))) {

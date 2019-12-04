@@ -2,9 +2,8 @@ package cn.dnaizn.mall.mapper;
 
 import cn.dnaizn.mall.pojo.ContentCategory;
 import cn.dnaizn.mall.pojo.ContentCategoryExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface ContentCategoryMapper {
     int countByExample(ContentCategoryExample example);

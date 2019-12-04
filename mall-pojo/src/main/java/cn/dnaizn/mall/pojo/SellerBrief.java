@@ -56,6 +56,8 @@ public class SellerBrief implements Serializable {
 
     private String brief;
 
+    private Integer prepare;
+
     public String getSellerId() {
         return sellerId;
     }
@@ -262,5 +264,13 @@ public class SellerBrief implements Serializable {
 
     public void setBrief(String brief) {
         this.brief = brief == null ? null : brief.trim();
+    }
+
+    public Integer getPrepare() {
+        return prepare;
+    }
+
+    public void setPrepare(Integer prepare) {
+        this.prepare = prepare;
     }
 }

@@ -1,6 +1,7 @@
 package cn.dnaizn.mall.sell.service;
 
 import cn.dnaizn.mall.sell.Jwt.JwtTokenUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -14,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 @ServerEndpoint(value = "/socket/{token}")
 public class WebSocketServer {
-
 
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static AtomicInteger online = new AtomicInteger();
@@ -49,11 +49,11 @@ public class WebSocketServer {
             sessionPools.put(sellerId, sessionList);
         }
         Map<String, Session> sessionList = sessionPools.get(sellerId);
-
         sessionList.put(token, session);
         sessionPools.put(sellerId, sessionList);
         addOnlineCount();
         System.out.println(sellerId + "加入webSocket！当前人数为" + online);
+        System.out.println(sessionPools);
         try {
             sendMessage(session, "欢迎" + sellerId + "加入连接！");
         } catch (IOException e) {
@@ -81,14 +81,14 @@ public class WebSocketServer {
      * @throws IOException
      */
     @OnMessage
-    public void onMessage(Session session ,String message) throws IOException {
+    public void onMessage(Session session, String message) throws IOException {
 //        for (Map<String, Session> sessionList : sessionPools.values()) {
 //            for (Session session : sessionList.values()) {
-                try {
-                    sendMessage(session, message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        try {
+            sendMessage(session, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //            }
 //        }
     }

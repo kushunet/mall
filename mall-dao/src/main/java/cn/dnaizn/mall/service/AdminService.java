@@ -2,6 +2,7 @@ package cn.dnaizn.mall.service;
 
 
 import cn.dnaizn.mall.pojo.Admin;
+import cn.dnaizn.mall.pojo.SellerCat;
 import entity.PageResult;
 
 import java.util.List;
@@ -13,18 +14,6 @@ import java.util.List;
  */
 public interface AdminService {
 
-	/**
-	 * 返回全部列表
-	 * @return
-	 */
-	List<Admin> findAll();
-	
-	
-	/**
-	 * 返回分页列表
-	 * @return
-	 */
-	PageResult findPage(int pageNum, int pageSize);
 	
 	
 	/**
@@ -45,13 +34,8 @@ public interface AdminService {
 	 * @return
 	 */
 	Admin findOne(String id);
-	
-	
-	/**
-	 * 批量删除
-	 * @param ids
-	 */
-	void delete(String[] ids);
+
+	List<SellerCat> findByParentId(Long parentId);
 
 	/**
 	 * 分页
@@ -59,6 +43,35 @@ public interface AdminService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	PageResult findPage(Admin admin, int pageNum, int pageSize);
-	
+	PageResult findPage(SellerCat sellerCat, int pageNum, int pageSize);
+	/**
+	 * 批量删除
+	 * @param ids
+	 */
+	void delete(Long[] ids);
+	/**
+	 * 根据ID获取实体
+	 * @param id
+	 * @return
+	 */
+	SellerCat findOne(Long id);
+	/**
+	 * 修改
+	 */
+	void update(SellerCat sellerCat);
+
+	void add(SellerCat sellerCat);
+
+	/**
+	 * 返回全部列表
+	 * @return
+	 */
+	List<SellerCat> findAll();
+
+
+	/**
+	 * 返回分页列表
+	 * @return
+	 */
+	PageResult findPage(int pageNum, int pageSize);
 }

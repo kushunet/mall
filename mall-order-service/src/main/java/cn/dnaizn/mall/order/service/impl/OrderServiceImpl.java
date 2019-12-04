@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.dnaizn.mall.DTO.GoodsPrintDto;
 import cn.dnaizn.mall.DTO.OrderDTO;
 import cn.dnaizn.mall.VO.*;
+import cn.dnaizn.mall.enums.SellerStatusEnum;
 import cn.dnaizn.mall.exception.MallException;
-import cn.dnaizn.mall.mapper.OrderItemMapper;
-import cn.dnaizn.mall.mapper.OrderMainMapper;
-import cn.dnaizn.mall.mapper.OrdersAdjustmentMapper;
+import cn.dnaizn.mall.mapper.*;
 import cn.dnaizn.mall.pojo.*;
+import cn.dnaizn.mall.util.RedisUtil;
+import cn.dnaizn.mall.util.ResultVOUtil;
 import cn.dnaizn.mall.utils.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -24,6 +26,7 @@ import cn.dnaizn.mall.service.OrderService;
 
 import entity.PageResult;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 /**
  * 服务实现层
@@ -43,6 +46,17 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrdersAdjustmentMapper ordersAdjustmentMapper;
 
+    @Autowired
+    OrderStatusListMapper orderStatusListMapper;
+
+    @Autowired
+    SellerBriefMapper sellerBriefMapper;
+
+    @Autowired
+    PrinterMapper printerMapper;
+
+    @Autowired
+    RedisUtil redisUtil;
     /**
      * 查询全部
      */
@@ -58,6 +72,9 @@ public class OrderServiceImpl implements OrderService {
         if (orderDTO.getState() != null) {
             criteria.andStatusIn(orderDTO.getState());
         }
+        if (orderDTO.getAfterSale() != null) {
+            criteria.andAfterSaleIn(orderDTO.getAfterSale());
+        }
         criteria.andPaymentTimeIsNotNull();
         if (orderDTO.getOrder() != null) {
             if (orderDTO.getOrder() == 1) {
@@ -69,6 +86,27 @@ public class OrderServiceImpl implements OrderService {
         return getPageResult(pageNum, pageSize, example);
     }
 
+    @Override
+    public PageResult findNoSettlementPage(String sellerId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        OrderMainExample example = new OrderMainExample();
+        OrderMainExample.Criteria criteria = example.createCriteria();
+        criteria.andCTimestampLessThanOrEqualTo(
+                Integer.parseInt((getTodayZeroPointTimestamps().toString().substring(0,10))));
+        System.out.println(System.currentTimeMillis());
+        System.out.println(getTodayZeroPointTimestamps());
+        criteria.andEndTimeIsNull();
+        criteria.andPaymentTimeIsNotNull();
+        criteria.andSellerIdEqualTo(sellerId);
+        example.setOrderByClause("payment_time desc");
+        Page<OrderMain> page = (Page<OrderMain>) orderMainMapper.selectByExample(example);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+    private Long getTodayZeroPointTimestamps(){
+        Long currentTimestamps=System.currentTimeMillis();
+        Long oneDayTimestamps= Long.valueOf(60*60*24*1000);
+        return currentTimestamps-(currentTimestamps+60*60*8*1000)%oneDayTimestamps;
+    }
     /**
      * 按分页查询
      */
@@ -125,6 +163,10 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderMainVO(orderMainVO);
         orderVO.setOrderItemVOList(orderItemVOList);
         orderVO.setOrdersAdjustmentVOList(ordersAdjustmentVOList);
+        OrderStatusListExample example2 = new OrderStatusListExample();
+        OrderStatusListExample.Criteria criteria2 = example2.createCriteria();
+        criteria2.andOrderIdEqualTo(id);
+        orderVO.setOrderStatusListList(orderStatusListMapper.selectByExample(example2));
         return orderVO;
     }
 
@@ -184,19 +226,89 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void genDeliver(String orderId) {
-        String timestamp = System.currentTimeMillis() / 1000 + "";
-        String nonce_str = KeyUtil.getRandomString(32);
+    public Object gen(String orderId) {
         String url = "openApi/deliver/gen";
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("oid", orderId);
-        map.put("timestamp", timestamp);
-        map.put("nonce_str", nonce_str);
         Object o = JSONObject.toJSONString(SignUtil.create(map));
         JSONObject jsonObject = JSON.parseObject(o.toString());
-        JSONObject jsonObject1 = HttpUtil.jsonPost(url, jsonObject);
-        if (jsonObject1.getString("code").equals("0")) {
-            throw new MallException(1, jsonObject1.getString("msg"));
+        return HttpUtil.jsonPost(HttpUtil.ORDER_URL + url, jsonObject);
+    }
+
+    @Override
+    public Object deliver(String orderId, String prepare) {
+        String url = "openApi/deliver/delivery";
+        Map<String, Object> map = new HashMap<>();
+        map.put("order_id", orderId);
+        map.put("type", prepare);
+        Object o = JSONObject.toJSONString(SignUtil.create(map));
+        JSONObject jsonObject = JSON.parseObject(o.toString());
+        return HttpUtil.jsonPost(HttpUtil.ORDER_URL + url, jsonObject);
+    }
+
+
+    @Override
+    public void create(String orderId, String sellerId) {
+        String u = "orders/delete";
+        Map<String, Object> m = new HashMap<>();
+        m.put("third_id", orderId);
+        Object o = JSONObject.toJSONString(SignUtil.create(m));
+        JSONObject jsonObject = JSON.parseObject(o.toString());
+        System.out.println(HttpUtil.jsonPost(HttpUtil.PRIN_URL + u, jsonObject).toJSONString());
+        String url = "orders/create";
+        OrderVO orderVO = findOne(orderId);
+        PrinterExample example = new PrinterExample();
+        PrinterExample.Criteria criteria = example.createCriteria();
+        criteria.andSellerIdEqualTo(sellerId);
+        List<Printer> printerList = printerMapper.selectByExample(example);
+        if(printerList.size()<1){
+            throw new  MallException(1,"该商家没有打印机");
         }
+        SellerBrief sellerBrief = sellerBriefMapper.selectByPrimaryKey(sellerId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", sellerBrief.getNickName());
+        map.put("third_id", orderVO.getOrderMainVO().getOrderId());
+        map.put("serial_id", orderVO.getOrderMainVO().getDaySn());
+        List<String> stringList = new ArrayList<>();
+        for (OrdersAdjustmentVO item : orderVO.getOrdersAdjustmentVOList()) {
+            stringList.add(item.getTitle());
+        }
+        map.put("information_offers", stringList);
+        List<GoodsPrintDto> goodsPrintDtoArrayList = new ArrayList<>();
+        for (OrderItemVO item : orderVO.getOrderItemVOList()) {
+            GoodsPrintDto goodsPrintDto = new GoodsPrintDto();
+            goodsPrintDto.setTitle(item.getTitle());
+            goodsPrintDto.setNum(item.getNum());
+            goodsPrintDto.setPrice(item.getPrice());
+            goodsPrintDtoArrayList.add(goodsPrintDto);
+        }
+        map.put("product", goodsPrintDtoArrayList);
+        map.put("total", orderVO.getOrderMainVO().getTotal());
+        map.put("address", orderVO.getOrderMainVO().getReceiverAreaName());
+        map.put("name", orderVO.getOrderMainVO().getReceiver());
+        if (orderVO.getOrderMainVO().getBuyerMessage().isEmpty()){
+            orderVO.getOrderMainVO().setBuyerMessage("未填");
+        }
+        map.put("remarks", orderVO.getOrderMainVO().getBuyerMessage());
+        map.put("platform_type", "3");
+        map.put("platform_type_ext", "比送达商城");
+        map.put("phone", orderVO.getOrderMainVO().getReceiverMobile());
+        for (Printer printer : printerList) {
+            map.put("pos_id", printer.getPrinterId());
+            o = JSONObject.toJSONString(SignUtil.create(map));
+            jsonObject = JSON.parseObject(o.toString());
+            System.out.println(jsonObject);
+            System.out.println(HttpUtil.jsonPost(HttpUtil.PRIN_URL + url, jsonObject).toJSONString());
+        }
+    }
+
+    @Override
+    public Object printing(String orderId) {
+        String url = "pos/printing";
+        Map<String,Object> map = new HashMap<>();
+        map.put("third_id",orderId);
+        Object o = JSONObject.toJSONString(SignUtil.create(map));
+        JSONObject jsonObject = JSON.parseObject(o.toString());
+        return HttpUtil.jsonPost(HttpUtil.PRIN_URL + url, jsonObject);
     }
 }

@@ -20,6 +20,8 @@ public class SellerExamine implements Serializable {
 
     private String adminId;
 
+    private String reason;
+
     public Integer getId() {
         return id;
     }
@@ -82,5 +84,13 @@ public class SellerExamine implements Serializable {
 
     public void setAdminId(String adminId) {
         this.adminId = adminId == null ? null : adminId.trim();
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason == null ? null : reason.trim();
     }
 }

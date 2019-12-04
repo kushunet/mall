@@ -5,13 +5,11 @@ import cn.dnaizn.mall.DTO.AddressDTO;
 import cn.dnaizn.mall.DTO.DeliverDTO;
 import cn.dnaizn.mall.DTO.SellerFormDTO;
 import cn.dnaizn.mall.DTO.SellerRegisterDTO;
-import cn.dnaizn.mall.enums.SellerBriefStatusEnum;
+import cn.dnaizn.mall.enums.RedisStatusEnum;
 import cn.dnaizn.mall.enums.SellerExamineEnum;
 import cn.dnaizn.mall.enums.SellerStatusEnum;
 import cn.dnaizn.mall.exception.MallException;
-import cn.dnaizn.mall.mapper.SellerBriefMapper;
-import cn.dnaizn.mall.mapper.SellerExamineMapper;
-import cn.dnaizn.mall.mapper.SellerMapper;
+import cn.dnaizn.mall.mapper.*;
 import cn.dnaizn.mall.mq.ActiveMQUtil;
 import cn.dnaizn.mall.pojo.*;
 import cn.dnaizn.mall.service.SellerService;
@@ -39,7 +37,7 @@ import java.util.*;
  * @author Administrator
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class SellerServiceImpl implements SellerService {
 
     @Autowired
@@ -57,21 +55,20 @@ public class SellerServiceImpl implements SellerService {
     @Autowired
     SellerExamineMapper sellerExamineMapper;
 
+    @Autowired
+    SellerSettingMapper sellerSettingMapper;
+
+    @Autowired
+    PrinterMapper printerMapper;
+
+    @Autowired
+    SellerWechatAccountMapper sellerWechatAccountMapper;
+
     /**
      * 查询全部
      */
     @Override
     public List<Seller> findAll() {
-        Jedis jedis = redisUtil.getJedis();
-        Map map = new HashMap();
-        map.put("status", 1);
-        Map m = new HashMap();
-        m.put("type", "order_status");
-        m.put("id", "33549188335681536");
-        m.put("status_cn", SellerStatusEnum.PASS_AUDIT.getMessage());
-        map.put("data", m);
-        jedis.publish("mall.message", JSONObject.toJSONString(map));
-        jedis.close();
         return sellerMapper.selectByExample(null);
     }
 
@@ -96,7 +93,7 @@ public class SellerServiceImpl implements SellerService {
         seller.setPassword(sellerRegisterDTO.getPassword());
         seller.setMobile(sellerRegisterDTO.getMobile());
         seller.setCreateTime(new Date());
-        seller.setStatus(0);
+        seller.setStatus(SellerStatusEnum.NOT_APPLY.getCode());
         sellerBrief.setSellerId(seller.getSellerId());
         Jedis jedis = redisUtil.getJedis();
         String sellerMobileKey = "sellerFormDTO:" + sellerRegisterDTO.getMobile() + ":form";
@@ -108,127 +105,126 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public void update(Seller seller) {
-        sellerMapper.updateByPrimaryKeySelective(seller);
+        sellerMapper.updateByPrimaryKey(seller);
     }
 
     /**
      * 修改
      */
     @Override
-    public void tUpdate(String sellerId, Integer id){
-            SellerExamine sellerExamine = sellerExamineMapper.selectByPrimaryKey(id);
-            if (sellerExamine.getStatus().equals(2)){
-                if (!sellerExamine.getSellerId().equals(sellerId)){
-                    throw new MallException(1,"修改ID不属于该商家");
-                }
-
-                if (sellerExamine.getType().equals(0)){
-                    //头像
-                    SellerBrief sellerBrief = new SellerBrief();
-                    sellerBrief.setSellerId(sellerId);
-                    sellerBrief.setAvatar(sellerExamine.getData());
-                    sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
-                }
-                else if (sellerExamine.getType().equals(1)){
-                    //店铺名
-                    SellerBrief sellerBrief = new SellerBrief();
-                    sellerBrief.setSellerId(sellerId);
-                    Seller seller= new Seller();
-                    seller.setSellerId(sellerId);
-                    seller.setNickName(sellerExamine.getData());
-                    sellerBrief.setNickName(sellerExamine.getData());
-                    sellerMapper.updateByPrimaryKeySelective(seller);
-                    sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
-                }
-                else if (sellerExamine.getType().equals(2)){
-                    //联系人电话
-                    SellerBrief sellerBrief = new SellerBrief();
-                    sellerBrief.setSellerId(sellerId);
-                    Seller seller= new Seller();
-                    seller.setSellerId(sellerId);
-                    seller.setLinkmanMobile(sellerExamine.getData());
-                    sellerBrief.setLinkmanMobile(sellerExamine.getData());
-                    sellerMapper.updateByPrimaryKeySelective(seller);
-                    sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
-                }
-                else if (sellerExamine.getType().equals(3)){
-                    //详细地址
-
-                    AddressDTO addressDTO=JSONObject.parseObject(sellerExamine.getData(),AddressDTO.class);
-                    updateAddress(addressDTO,sellerExamine.getSellerId());
-                }
-                else if (sellerExamine.getType().equals(4)){
-                    SellerBrief sellerBrief = new SellerBrief();
-                    sellerBrief.setSellerId(sellerId);
-                    //分类
-                    sellerBrief.setCategory1Id(Integer.parseInt(JSON.parseArray(sellerExamine.getData()).getString(0)));
-                    sellerBrief.setCategory2Id(Integer.parseInt(JSON.parseArray(sellerExamine.getData()).getString(1)));
-                    sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
-                }
-                else if (sellerExamine.getType().equals(5)){
-                    //相册
-                    SellerBrief sellerBrief = new SellerBrief();
-                    sellerBrief.setSellerId(sellerId);
-                    sellerBrief.setAlbum(sellerExamine.getData());
-                    sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
-                }
-                else if (sellerExamine.getType().equals(6)){
-                    //营业时间
-                    SellerBrief sellerBrief = new SellerBrief();
-                    sellerBrief.setSellerId(sellerId);
-                    sellerBrief.setBusinessHours(sellerExamine.getData());
-                    sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
-                }else if (sellerExamine.getType().equals(7)){
-                    //公告
-                }else if (sellerExamine.getType().equals(8)){
-                    //简介
-                    Seller seller= new Seller();
-                    seller.setSellerId(sellerId);
-                    seller.setBrief(sellerExamine.getData());
-                    sellerMapper.updateByPrimaryKeySelective(seller);
-                }else if (sellerExamine.getType().equals(9)){
-                    //营业执照
-                    Seller seller= new Seller();
-                    seller.setSellerId(sellerId);
-                    seller.setLicense(sellerExamine.getData());
-                    sellerMapper.updateByPrimaryKeySelective(seller);
-                }else if (sellerExamine.getType().equals(10)){
-                    //其他执照
-                    Seller seller= new Seller();
-                    seller.setSellerId(sellerId);
-                    seller.setPapers(sellerExamine.getData());
-                    sellerMapper.updateByPrimaryKeySelective(seller);
-                }else if (sellerExamine.getType().equals(11)){
-                    //法人身份证
-                    Seller seller= new Seller();
-                    seller.setSellerId(sellerId);
-                    seller.setLegalPersonCardId(JSON.parseArray(sellerExamine.getData()).getString(0));
-                    seller.setLegalPersonPic(JSON.parseArray(sellerExamine.getData()).getString(1));
-                    sellerMapper.updateByPrimaryKeySelective(seller);
-                }else {
-                    return;
-                }
-                Jedis jedis = redisUtil.getJedis();
-                Map map = new HashMap();
-                map.put("status", SellerBriefStatusEnum.SELLER_UPDATA.getCode());
-                Map m = new HashMap();
-                m.put("type", "seller_status");
-                m.put("id", sellerExamine.getSellerId());
-                m.put("status_cn", SellerBriefStatusEnum.SELLER_UPDATA.getMessage());
-                map.put("data", m);
-                jedis.publish("mall.message", JSONObject.toJSONString(map));
-                jedis.close();
-                sellerExamine.setStatus(SellerExamineEnum.SHUT_DOWN.getCode());
-                sellerExamineMapper.updateByPrimaryKeySelective(sellerExamine);
-            }else {
-                throw new MallException(1,"审核状态不正确");
+    public void tUpdate(String sellerId, Integer id) {
+        SellerExamine sellerExamine = sellerExamineMapper.selectByPrimaryKey(id);
+        if (sellerExamine.getStatus().equals(2)) {
+            if (!sellerExamine.getSellerId().equals(sellerId)) {
+                throw new MallException(1, "修改ID不属于该商家");
             }
+
+            if (sellerExamine.getType().equals(0)) {
+                //头像
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                sellerBrief.setAvatar(sellerExamine.getData());
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(1)) {
+                //店铺名
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                Seller seller = new Seller();
+                seller.setSellerId(sellerId);
+                seller.setNickName(sellerExamine.getData());
+                sellerBrief.setNickName(sellerExamine.getData());
+                sellerMapper.updateByPrimaryKeySelective(seller);
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(2)) {
+                //联系人电话
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                Seller seller = new Seller();
+                seller.setSellerId(sellerId);
+                seller.setLinkmanMobile(sellerExamine.getData());
+                sellerBrief.setLinkmanMobile(sellerExamine.getData());
+                sellerMapper.updateByPrimaryKeySelective(seller);
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(3)) {
+                //详细地址
+                AddressDTO addressDTO = JSONObject.parseObject(sellerExamine.getData(), AddressDTO.class);
+                updateAddress(addressDTO, sellerExamine.getSellerId());
+            } else if (sellerExamine.getType().equals(4)) {
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                //分类
+                sellerBrief.setCategory1Id(Integer.parseInt(JSON.parseArray(sellerExamine.getData()).getString(0)));
+                sellerBrief.setCategory2Id(Integer.parseInt(JSON.parseArray(sellerExamine.getData()).getString(1)));
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(5)) {
+                //相册
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                sellerBrief.setAlbum(sellerExamine.getData());
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(6)) {
+                //营业时间
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                sellerBrief.setBusinessHours(sellerExamine.getData());
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(7)) {
+                //公告
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                sellerBrief.setNotice(sellerExamine.getData());
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(8)) {
+                //简介
+                SellerBrief sellerBrief = new SellerBrief();
+                sellerBrief.setSellerId(sellerId);
+                sellerBrief.setBrief(sellerExamine.getData());
+                sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+            } else if (sellerExamine.getType().equals(9)) {
+                //营业执照
+                Seller seller = new Seller();
+                seller.setSellerId(sellerId);
+                seller.setLicense(sellerExamine.getData());
+                sellerMapper.updateByPrimaryKeySelective(seller);
+            } else if (sellerExamine.getType().equals(10)) {
+                //其他执照
+                Seller seller = new Seller();
+                seller.setSellerId(sellerId);
+                seller.setPapers(sellerExamine.getData());
+                sellerMapper.updateByPrimaryKeySelective(seller);
+            } else if (sellerExamine.getType().equals(11)) {
+                //法人身份证
+                Seller seller = new Seller();
+                seller.setSellerId(sellerId);
+                seller.setLegalPerson(JSON.parseObject(sellerExamine.getData()).getString("legalPerson"));
+                seller.setLegalPersonCardId(JSON.parseObject(sellerExamine.getData()).getString("legalPersonCardId"));
+                seller.setLegalPersonPic(JSON.parseObject(sellerExamine.getData()).getString("legalPersonPic"));
+                sellerMapper.updateByPrimaryKeySelective(seller);
+            } else {
+                return;
+            }
+            Jedis jedis = redisUtil.getJedis();
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", RedisStatusEnum.UPDATE.getCode());
+            Map<String, String> m = new HashMap<>();
+            m.put("type", "seller_status");
+            m.put("id", sellerExamine.getSellerId());
+            m.put("status_cn", RedisStatusEnum.UPDATE.getMessage());
+            map.put("data", m);
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
+            jedis.close();
+            sellerExamine.setStatus(SellerExamineEnum.SHUT_DOWN.getCode());
+            sellerExamineMapper.updateByPrimaryKeySelective(sellerExamine);
+        } else {
+            throw new MallException(1, "审核状态不正确");
+        }
     }
-    private void updateAddress(AddressDTO addressDTO,String sellerId){
+
+    private void updateAddress(AddressDTO addressDTO, String sellerId) {
         SellerBrief sellerBrief = sellerBriefMapper.selectByPrimaryKey(sellerId);
         Seller seller = sellerMapper.selectByPrimaryKey(sellerId);
         seller.setAddress(addressDTO.getAdcode());
-        seller.setAddressDetail(addressDTO.getAddress()+addressDTO.getAddressDetail());
+        seller.setAddressDetail(addressDTO.getAddress() + addressDTO.getAddressDetail());
         sellerBrief.setAdcode(addressDTO.getAdcode());
         sellerBrief.setAddress(addressDTO.getAddress());
         sellerBrief.setAddressDetail(addressDTO.getAddressDetail());
@@ -236,6 +232,7 @@ public class SellerServiceImpl implements SellerService {
         sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
         sellerMapper.updateByPrimaryKeySelective(seller);
     }
+
     @Override
     public void updateSellerBrief(SellerBrief sellerBrief) {
         sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
@@ -264,7 +261,7 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public DeliverDTO findOneDeliver(String sellerId) {
-        DeliverDTO deliverDTO =new DeliverDTO();
+        DeliverDTO deliverDTO = new DeliverDTO();
         BeanUtils.copyProperties(sellerBriefMapper.selectByPrimaryKey(sellerId), deliverDTO);
         return deliverDTO;
     }
@@ -276,6 +273,7 @@ public class SellerServiceImpl implements SellerService {
         addressDTO.setAdcode(sellerBrief.getAdcode());
         addressDTO.setAddress(sellerBrief.getAddress());
         addressDTO.setAddressDetail(sellerBrief.getAddressDetail());
+        addressDTO.setLocation(sellerBrief.getLocation());
         return addressDTO;
     }
 
@@ -286,15 +284,16 @@ public class SellerServiceImpl implements SellerService {
     public void delete(String[] ids) {
         Jedis jedis = redisUtil.getJedis();
         for (String id : ids) {
-            Map map = new HashMap();
-            map.put("status", SellerBriefStatusEnum.SELLER_DELETE.getCode());
-            Map m = new HashMap();
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", RedisStatusEnum.DELETE.getCode());
+            Map<String, String> m = new HashMap<String, String>();
             m.put("type", "seller_status");
             m.put("id", id);
-            m.put("status_cn", SellerBriefStatusEnum.SELLER_DELETE.getMessage());
+            m.put("status_cn", RedisStatusEnum.DELETE.getMessage());
             map.put("data", m);
             jedis.publish("mall.message", JSONObject.toJSONString(map));
             sellerMapper.deleteByPrimaryKey(id);
+            sellerBriefMapper.deleteByPrimaryKey(id);
         }
         jedis.close();
     }
@@ -380,21 +379,82 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public void updateStatus(String sellerId, Integer status) {
+        Jedis jedis = redisUtil.getJedis();
         Seller seller = sellerMapper.selectByPrimaryKey(sellerId);
+        SellerBrief sellerBrief = sellerBriefMapper.selectByPrimaryKey(sellerId);
         seller.setStatus(status);
-        sellerMapper.updateByPrimaryKey(seller);
-        if (status.equals(SellerStatusEnum.PASS_AUDIT.getCode())) {
-            Jedis jedis = redisUtil.getJedis();
-            Map map = new HashMap();
-            map.put("status", SellerBriefStatusEnum.SELLER_CREATE.getCode());
-            Map m = new HashMap();
-            m.put("type", "seller_status");
-            m.put("id", seller.getSellerId());
-            m.put("status_cn", SellerBriefStatusEnum.SELLER_CREATE.getMessage());
-            map.put("data", m);
-            jedis.publish("mall.message", JSONObject.toJSONString(map));
-            jedis.close();
+        String sellerFormKey = "sellerFormDTO:" + sellerId + ":form";
+        String sellerForm = jedis.get(sellerFormKey);
+        if (sellerForm != null) {
+            SellerFormDTO sellerFormDTO = JSON.parseObject(sellerForm, SellerFormDTO.class);
+            seller.setSellerId(seller.getSellerId());
+            seller.setNickName(sellerFormDTO.getNickName());
+            seller.setLinkmanName(sellerFormDTO.getLinkmanName());
+            seller.setLinkmanMobile(sellerFormDTO.getLinkmanMobile());
+            seller.setAddress(sellerFormDTO.getAdcode());
+            if (sellerFormDTO.getCity().isEmpty()) {
+                sellerFormDTO.setCity("");
+            }
+            if (sellerFormDTO.getAreas().isEmpty()) {
+                sellerFormDTO.setAreas("");
+            }
+            seller.setAddressDetail(sellerFormDTO.getProvince() + sellerFormDTO.getCity() +
+                    sellerFormDTO.getAreas() + sellerFormDTO.getAddressDetail());
+            seller.setLicense(sellerFormDTO.getLicense());
+            seller.setPapers(sellerFormDTO.getPapers());
+            seller.setLegalPerson(sellerFormDTO.getLegalPerson());
+            seller.setLegalPersonCardId(sellerFormDTO.getLegalPersonCardId());
+            seller.setLegalPersonPic(sellerFormDTO.getLegalPersonPic());
+            sellerBrief.setSellerId(seller.getSellerId());
+            sellerBrief.setNickName(sellerFormDTO.getNickName());
+            sellerBrief.setLinkmanName(sellerFormDTO.getLinkmanName());
+            sellerBrief.setLinkmanMobile(sellerFormDTO.getLinkmanMobile());
+            sellerBrief.setCategory1Id(sellerFormDTO.getCategory1Id());
+            sellerBrief.setCategory2Id(sellerFormDTO.getCategory2Id());
+            sellerBrief.setCategory3Id(sellerFormDTO.getCategory3Id());
+            sellerBrief.setAdcode(sellerFormDTO.getAdcode());
+            sellerBrief.setAvatar(sellerFormDTO.getAvatar());
+            sellerBrief.setAddress(sellerFormDTO.getProvince() + sellerFormDTO.getCity() + sellerFormDTO.getAreas());
+            sellerBrief.setAddressDetail(sellerFormDTO.getAddressDetail());
+            sellerBrief.setAlbum(sellerFormDTO.getAlbum());
+            sellerBrief.setLocation(sellerFormDTO.getLocation());
         }
+        sellerMapper.updateByPrimaryKey(seller);
+        sellerBriefMapper.updateByPrimaryKey(sellerBrief);
+        Map<String, Object> map = new HashMap<>();
+        Map<String, String> m = new HashMap<>();
+        m.put("type", "seller_status");
+        m.put("id", seller.getSellerId());
+        map.put("data", m);
+        if (seller.getStatus()==1){
+            m.put("status_cn", RedisStatusEnum.CREATE.getMessage());
+            map.put("status", RedisStatusEnum.CREATE.getCode());
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
+            jedis.del(sellerFormKey);
+        }else if (seller.getStatus() == 3){
+            map.put("status", RedisStatusEnum.UPDATE.getCode());
+            m.put("status_cn", RedisStatusEnum.UPDATE.getMessage());
+            jedis.publish("mall.message", JSONObject.toJSONString(map));
+        }
+
+        jedis.close();
+    }
+
+    @Override
+    public void updateSellerStatus(String sellerId, Integer status) {
+        SellerBrief sellerBrief = sellerBriefMapper.selectByPrimaryKey(sellerId);
+        sellerBrief.setStatus(status);
+        sellerBriefMapper.updateByPrimaryKeySelective(sellerBrief);
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", RedisStatusEnum.UPDATE.getCode());
+        Jedis jedis = redisUtil.getJedis();
+        Map<String, String> m = new HashMap<>();
+        m.put("type", "seller_status");
+        m.put("id", sellerBrief.getSellerId());
+        m.put("status_cn", RedisStatusEnum.UPDATE.getMessage());
+        map.put("data", m);
+        jedis.publish("mall.message", JSONObject.toJSONString(map));
+        jedis.close();
     }
 
     @Override
@@ -404,48 +464,16 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public void SellerRegister(SellerFormDTO sellerFormDTO) {
-        Seller seller = sellerMapper.selectByPrimaryKey(sellerFormDTO.getSellerId());
-        SellerBrief sellerBrief = sellerBriefMapper.selectByPrimaryKey(sellerFormDTO.getSellerId());
-        seller.setSellerId(seller.getSellerId());
-        seller.setNickName(sellerFormDTO.getNickName());
-        seller.setLinkmanName(sellerFormDTO.getLinkmanName());
-        seller.setLinkmanMobile(sellerFormDTO.getLinkmanMobile());
-        seller.setAddress(sellerFormDTO.getAdcode());
-        if (sellerFormDTO.getCity().isEmpty()){
-            sellerFormDTO.setCity("");
-        }
-        if (sellerFormDTO.getAreas().isEmpty()){
-            sellerFormDTO.setAreas("");
-        }
-        seller.setAddressDetail(sellerFormDTO.getProvince()+sellerFormDTO.getCity()+
-                sellerFormDTO.getAreas()+sellerFormDTO.getAddressDetail());
-        seller.setLicense(sellerFormDTO.getLicense());
-        seller.setPapers(sellerFormDTO.getPapers());
-        seller.setLegalPerson(sellerFormDTO.getLegalPerson());
-        seller.setLegalPersonCardId(sellerFormDTO.getLegalPersonCardId());
-        seller.setLegalPersonPic(sellerFormDTO.getLegalPersonPic());
-        sellerBrief.setSellerId(seller.getSellerId());
-        sellerBrief.setNickName(sellerFormDTO.getNickName());
-        sellerBrief.setLinkmanName(sellerFormDTO.getLinkmanName());
-        sellerBrief.setLinkmanMobile(sellerFormDTO.getLinkmanMobile());
-        sellerBrief.setCategory1Id(sellerFormDTO.getCategory1Id());
-        sellerBrief.setCategory2Id(sellerFormDTO.getCategory2Id());
-        sellerBrief.setCategory3Id(sellerFormDTO.getCategory3Id());
-        sellerBrief.setAdcode(sellerFormDTO.getAdcode());
-        sellerBrief.setAddress(sellerFormDTO.getProvince()+sellerFormDTO.getCity()+sellerFormDTO.getAreas());
-        sellerBrief.setAddressDetail(sellerFormDTO.getAddressDetail());
-        sellerBrief.setAlbum(sellerFormDTO.getAlbum());
-        sellerBrief.setLocation(sellerFormDTO.getLocation());
+
         Jedis jedis = redisUtil.getJedis();
-        String sellerFormKey = "sellerFormDTO:" + seller.getSellerId() + ":form";
+        String sellerFormKey = "sellerFormDTO:" + sellerFormDTO.getSellerId() + ":form";
         String sellerForm = jedis.get(sellerFormKey);
         if (StringUtil.isNotBlank(sellerForm)) {
             jedis.del(sellerFormKey);
         }
-        jedis.set("sellerFormDTO:" + seller.getSellerId() + ":form", JSON.toJSONString(sellerFormDTO));
+        jedis.set("sellerFormDTO:" + sellerFormDTO.getSellerId() + ":form", JSON.toJSONString(sellerFormDTO));
         jedis.close();
-        sellerMapper.updateByPrimaryKey(seller);
-        sellerBriefMapper.updateByPrimaryKey(sellerBrief);
+
     }
 
     @Override
@@ -465,12 +493,19 @@ public class SellerServiceImpl implements SellerService {
      * @param mobile
      */
     @Override
-    public void createSmsCode(String mobile) {
+    public void createSmsCode(String mobile, Integer type) {
         //生成随机数
-        String code = ((Math.random() * 9 + 1) * 100000) + "";
-        System.out.println(code);
         Jedis jedis = redisUtil.getJedis();
-        String sellerMobileKey = "sellerFormDTO:" + mobile + ":form";
+        String sellerMobileKey = "seller:" + mobile + type + ":code";
+        String code = jedis.get(sellerMobileKey);
+        if (code == null) {
+            int i = (int) ((Math.random() * 9 + 1) * 100000);
+            if (i <= 99999) {
+                code = "0" + i;
+            } else {
+                code = i + "";
+            }
+        }
         jedis.setex(sellerMobileKey, 20 * 60, code);
         jedis.close();
         //发送短信内容MQ
@@ -484,9 +519,15 @@ public class SellerServiceImpl implements SellerService {
             MessageProducer producer = session.createProducer(queue);
             MapMessage mapMessage = session.createMapMessage();
             mapMessage.setString("mobile", mobile);//手机号
-            mapMessage.setString("template_code", "SMS_173246457");
-            mapMessage.setString("sign_name", "毒奶最牛");
-            Map map = new HashMap();
+            mapMessage.setString("template_code", "SMS_176615117");
+            if (type == 1) {
+                mapMessage.setString("template_code", "SMS_176885415");
+            }
+            if (type == 2) {
+                mapMessage.setString("template_code", "SMS_176943990");
+            }
+            mapMessage.setString("sign_name", "今抖云");
+            Map<String, String> map = new HashMap<>();
             map.put("code", code);
             mapMessage.setString("param", JSON.toJSONString(map));
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);
@@ -507,17 +548,18 @@ public class SellerServiceImpl implements SellerService {
      * @return
      */
     @Override
-    public boolean checkSmsCode(String mobile, String code) {
+    public boolean checkSmsCode(String mobile, String code, Integer type) {
         Jedis jedis = redisUtil.getJedis();
-        String sellerPhoneKey = "sellerFormDTO:" + mobile + ":form";
-        String systemCode = jedis.get(sellerPhoneKey);
-        jedis.close();
+        String sellerMobileKey = "seller:" + mobile + type + ":code";
+        String systemCode = jedis.get(sellerMobileKey);
         if (systemCode == null) {
             return false;
         }
         if (!code.equals(systemCode)) {
             return false;
         }
+        jedis.del(sellerMobileKey);
+        jedis.close();
         return true;
     }
 
@@ -528,23 +570,93 @@ public class SellerServiceImpl implements SellerService {
      */
     @Override
     public void addUpdate(SellerExamine sellerExamine) {
-        Integer[] arr = new Integer[]{0,1,2,3,4};
+        Integer[] arr = new Integer[]{2, 6, 7, 8};
         SellerExamineExample example = new SellerExamineExample();
         SellerExamineExample.Criteria criteria = example.createCriteria();
         criteria.andSellerIdEqualTo(sellerExamine.getSellerId());
         criteria.andTypeEqualTo(sellerExamine.getType());
-        criteria.andStatusEqualTo(0);
-        if (sellerExamineMapper.countByExample(example)==0){
-            sellerExamine.setCreateTime(new Date());
-            if(Arrays.asList(arr).contains(sellerExamine.getType())){
-                sellerExamine.setStatus(SellerExamineEnum.PASS_AUDIT.getCode());
-            }else {
-                sellerExamine.setStatus(SellerExamineEnum.NOT_AUDIT.getCode());
-            }
+        criteria.andStatusNotEqualTo(3);
+        if (sellerExamineMapper.countByExample(example) == 0) {
+            getUpdate(sellerExamine, arr);
             sellerExamineMapper.insertSelective(sellerExamine);
-        }else {
-            throw new MallException(1,"请勿重复申请");
+        } else {
+            getUpdate(sellerExamine, arr);
+            sellerExamine.setId(sellerExamineMapper.selectByExample(example).get(0).getId());
+            sellerExamineMapper.updateByPrimaryKey(sellerExamine);
         }
+    }
 
+    private void getUpdate(SellerExamine sellerExamine, Integer[] arr) {
+        sellerExamine.setCreateTime(new Date());
+        if (Arrays.asList(arr).contains(sellerExamine.getType())) {
+            sellerExamine.setStatus(SellerExamineEnum.PASS_AUDIT.getCode());
+            sellerExamine.setAdminId("系统处理");
+            sellerExamine.setExamineTime(new Date());
+        } else {
+            sellerExamine.setStatus(SellerExamineEnum.NOT_AUDIT.getCode());
+        }
+    }
+
+    @Override
+    public void addPrinter(Printer printer) {
+        printerMapper.insertSelective(printer);
+    }
+
+    @Override
+    public void updatePrinter(Printer printer) {
+        PrinterExample example = new PrinterExample();
+        PrinterExample.Criteria criteria = example.createCriteria();
+        criteria.andSellerIdEqualTo(printer.getSellerId());
+        criteria.andPrinterIdEqualTo(printer.getPrinterId());
+        printer.setId(printerMapper.selectByExample(example).get(0).getId());
+        printerMapper.updateByPrimaryKeySelective(printer);
+    }
+
+    @Override
+    public Printer findPrinter(String posId) {
+        PrinterExample example = new PrinterExample();
+        PrinterExample.Criteria criteria = example.createCriteria();
+        criteria.andPrinterIdEqualTo(posId);
+
+        return printerMapper.selectByExample(example).get(0);
+    }
+
+    @Override
+    public List<Printer> findPrinterList(String sellerId) {
+        PrinterExample example = new PrinterExample();
+        PrinterExample.Criteria criteria = example.createCriteria();
+        criteria.andSellerIdEqualTo(sellerId);
+        return printerMapper.selectByExample(example);
+    }
+
+
+    @Override
+    public void deletePos(Integer id) {
+        printerMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void sellerSet(SellerSetting sellerSetting) {
+        if (sellerSettingMapper.selectByPrimaryKey(sellerSetting.getSellerId()) != null) {
+            sellerSettingMapper.updateByPrimaryKey(sellerSetting);
+        } else {
+            sellerSettingMapper.insert(sellerSetting);
+        }
+    }
+
+    @Override
+    public Object sellerFindSet(String sellerId) {
+        if (sellerSettingMapper.selectByPrimaryKey(sellerId) == null) {
+            return null;
+        }
+        return sellerSettingMapper.selectByPrimaryKey(sellerId).getSetting();
+    }
+
+    @Override
+    public SellerWechatAccount isOpenid(String sellerId) {
+        SellerWechatAccountExample example = new SellerWechatAccountExample();
+        SellerWechatAccountExample.Criteria criteria = example.createCriteria();
+        criteria.andSellerIdEqualTo(sellerId);
+        return sellerWechatAccountMapper.selectByExample(example).get(0);
     }
 }

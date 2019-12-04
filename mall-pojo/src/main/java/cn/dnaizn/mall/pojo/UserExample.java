@@ -446,63 +446,63 @@ public class UserExample {
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceIsNull() {
-            addCriterion("account_balance is null");
+        public Criteria andBalanceIsNull() {
+            addCriterion("balance is null");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceIsNotNull() {
-            addCriterion("account_balance is not null");
+        public Criteria andBalanceIsNotNull() {
+            addCriterion("balance is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceEqualTo(BigDecimal value) {
-            addCriterion("account_balance =", value, "accountBalance");
+        public Criteria andBalanceEqualTo(BigDecimal value) {
+            addCriterion("balance =", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceNotEqualTo(BigDecimal value) {
-            addCriterion("account_balance <>", value, "accountBalance");
+        public Criteria andBalanceNotEqualTo(BigDecimal value) {
+            addCriterion("balance <>", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceGreaterThan(BigDecimal value) {
-            addCriterion("account_balance >", value, "accountBalance");
+        public Criteria andBalanceGreaterThan(BigDecimal value) {
+            addCriterion("balance >", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("account_balance >=", value, "accountBalance");
+        public Criteria andBalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance >=", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceLessThan(BigDecimal value) {
-            addCriterion("account_balance <", value, "accountBalance");
+        public Criteria andBalanceLessThan(BigDecimal value) {
+            addCriterion("balance <", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("account_balance <=", value, "accountBalance");
+        public Criteria andBalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance <=", value, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceIn(List<BigDecimal> values) {
-            addCriterion("account_balance in", values, "accountBalance");
+        public Criteria andBalanceIn(List<BigDecimal> values) {
+            addCriterion("balance in", values, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceNotIn(List<BigDecimal> values) {
-            addCriterion("account_balance not in", values, "accountBalance");
+        public Criteria andBalanceNotIn(List<BigDecimal> values) {
+            addCriterion("balance not in", values, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("account_balance between", value1, value2, "accountBalance");
+        public Criteria andBalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance between", value1, value2, "balance");
             return (Criteria) this;
         }
 
-        public Criteria andAccountBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("account_balance not between", value1, value2, "accountBalance");
+        public Criteria andBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance not between", value1, value2, "balance");
             return (Criteria) this;
         }
 

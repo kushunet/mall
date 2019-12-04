@@ -1,1 +1,0 @@
-var app = angular.module('mall', ['pagination']);//定义同城购模块
